@@ -1,12 +1,3 @@
--- Drop tables with foreign key constraints first
-DROP TABLE IF EXISTS transactions CASCADE;
-DROP TABLE IF EXISTS inventory CASCADE;
-DROP TABLE IF EXISTS bookings CASCADE;
-DROP TABLE IF EXISTS classes CASCADE;
-DROP TABLE IF EXISTS gym_members CASCADE;
-DROP TABLE IF EXISTS employees CASCADE;
-DROP TABLE IF EXISTS gyms CASCADE;
-
 -- Create gyms table
 CREATE TABLE gyms (
     id_club INT PRIMARY KEY,
@@ -80,3 +71,4 @@ CREATE TABLE transactions (
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member)
 );
 
+--

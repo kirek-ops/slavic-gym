@@ -1,4 +1,4 @@
 # SQL-project
 SQL project (second semester) 
 
-ПОЛПРОЕКТАСДЕЛАНО
+![Schema](https://imgur.com/a/dMwIWyo)

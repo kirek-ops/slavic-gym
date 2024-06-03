@@ -4,20 +4,18 @@ import bcrypt from 'bcryptjs';
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [secondName, setSecondName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [car, setCar] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [id, setId] = useState('');
-    const [role, setRole] = useState(false);
     const navigate = useNavigate();
 
     const checkUserExists = async () => {
         try {
             const response = await axios.post('http://localhost:8080/auth/checkUserExists', {
-                username
+                email, phone
             });
             return response.data.exists;
         } catch (error) {
@@ -29,15 +27,14 @@ const SignupPage = () => {
     const handleSubmit = async () => {
         const userExists = await checkUserExists();
         if (userExists) {
-            alert('User with this username already exists');
+            alert('User with this email or phone already exists');
             return;
         }
 
         const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
         try {
             const requestBody = {
-                name, email, phone,
-                username, password: hashedPassword,
+                firstName, secondName, email, phone, password: hashedPassword,
             };
             console.log('Request body:', requestBody);
             const response = await axios.post('http://localhost:8080/auth/signup', requestBody);
@@ -53,21 +50,33 @@ const SignupPage = () => {
         if (id) {
             console.log('Updated id:', id);
             alert('Signup successful');
-            navigate('/interface', { state: { id: id, username: username } });
+            navigate('/interface', { state: { id: id, email: email } });
         }
-    }, [id, role, navigate]);
+    }, [id, navigate]);
 
     return (
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <br />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <label style={{ marginBottom: '10px' }}>First Name:</label>
+            <input type="text" name="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <br/>
 
-            <label>Password:</label>
-            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <br />
+            <label style={{ marginBottom: '10px' }}>Second Name:</label>
+            <input type="text" name="Second Name" value={secondName} onChange={(e) => setSecondName(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <br/>
 
-            <button onClick={handleSubmit}>Sign Up</button>
+            <label style={{ marginBottom: '10px' }}>Email:</label>
+            <input type="text" name="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <br/>
+
+            <label style={{ marginBottom: '10px' }}>Phone:</label>
+            <input type="text" name="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <br/>
+
+            <label style={{ marginBottom: '10px' }}>Password:</label>
+            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <br/>
+
+            <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Sign Up</button>
         </div>
     );
 };

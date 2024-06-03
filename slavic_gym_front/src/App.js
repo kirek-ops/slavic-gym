@@ -5,12 +5,13 @@ import Login from './Components/Login';
 import Signup from './Components/Signup';
 import QRgen from "./Components/QRgen";
 import Interface from "./Components/Interface";
+import Home from './Components/Home';
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<h1>Home</h1>} />
+                <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/interface" element={<Interface />} />

@@ -28,6 +28,12 @@ public class GymMemberDaoImpl implements GymMemberRepository {
         return jdbcTemplate.query(sql, new GymMemberRowMapper());
     }
 
+    // Creating new gym member
+    public void createGymMember(GymMember gymMember) {
+        String sql = "INSERT INTO gym_members (first_name, last_name, email, phone_number, join_date, passwd) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, gymMember.getFirst_name(), gymMember.getLast_name(), gymMember.getEmail(), gymMember.getPhone_number(), gymMember.getJoin_date(), gymMember.getPasswd());
+    }
+
     private static class GymMemberRowMapper implements RowMapper<GymMember> {
         @Override
         public GymMember mapRow(ResultSet rs, int rowNum) throws SQLException {

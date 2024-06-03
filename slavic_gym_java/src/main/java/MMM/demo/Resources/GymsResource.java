@@ -1,5 +1,6 @@
 package MMM.demo.Resources;
 
+import MMM.demo.Entities.Gym;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,8 @@ import java.util.ArrayList;
 @RequestMapping("/gyms")
 @RequiredArgsConstructor
 public class GymsResource {
-
     @GetMapping("getopengyms")
-    ResponseEntity <ArrayList<?>> getOpenGyms () {
+    ResponseEntity <ArrayList <Gym>> getOpenGyms () {
         return null;
     }
-
-
 }

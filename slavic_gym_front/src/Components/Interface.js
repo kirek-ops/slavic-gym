@@ -6,7 +6,7 @@ import axios from 'axios';
 const Interface = () => {
     const location = useLocation();
     const id = location.state.id;
-    const username = location.state.username;
+    const email = location.state.email;
 
     const navigate = useNavigate();
 
@@ -29,19 +29,19 @@ const Interface = () => {
 
     const handleQRButtonClick = () => {
         if (selectedGym) {
-            navigate('/myqr', { state: { id: id, username: username, gym: selectedGym } });
+            navigate('/myqr', { state: { id: id, email: email, gym: selectedGym } });
         } else {
             alert("Please select a gym before proceeding.");
         }
     };
 
     return (
-        <div style={{ textAlign: 'center', marginTop: '50px' }}>
-            <h1>Welcome to the Gym App</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <h1 style={{ marginBottom: '30px', color: '#007BFF' }}>Welcome to the Gym App</h1>
 
             <div style={{ marginBottom: '20px' }}>
-                <label htmlFor="gym-select">Choose a gym:</label>
-                <select id="gym-select" value={selectedGym} onChange={handleGymChange} style={{ marginLeft: '10px', padding: '5px' }}>
+                <label htmlFor="gym-select" style={{ marginRight: '10px', fontSize: '18px' }}>Choose a gym:</label>
+                <select id="gym-select" value={selectedGym} onChange={handleGymChange} style={{ padding: '10px', fontSize: '16px' }}>
                     <option value="">Select a gym</option>
                     {gyms.map((gym, index) => (
                         <option key={index} value={gym.id}>{gym.name}</option>
@@ -49,7 +49,7 @@ const Interface = () => {
                 </select>
             </div>
 
-            <button style={{ padding: '10px 20px', fontSize: '16px' }} onClick={handleQRButtonClick}>
+            <button style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }} onClick={handleQRButtonClick}>
                 Get My QR Code
             </button>
         </div>

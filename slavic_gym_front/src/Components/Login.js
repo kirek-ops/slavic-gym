@@ -31,16 +31,16 @@ const Login = () => {
     }
 
     return (
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <label style={{ marginBottom: '10px' }}>Username:</label>
+            <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
             <br/>
 
-            <label>Password:</label>
-            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <label style={{ marginBottom: '10px' }}>Password:</label>
+            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
             <br/>
 
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogin} style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Login</button>
         </div>
     );
 }

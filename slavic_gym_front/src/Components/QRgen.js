@@ -27,19 +27,20 @@ const QRgen = () => {
 
     return (
         <div style={{
-            textAlign: 'center',
-            marginTop: '50px'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh'
         }}>
-            <div style={{marginTop: '20px'}}>
-                <QRCode value={QRValue}/>
+            <div style={{marginTop: '20px', marginBottom: '20px'}}>
+                <QRCode value={QRValue} size={256} />
             </div>
-            <div style={{marginTop: '20px'}}>
+            <div style={{marginTop: '20px', fontSize: '18px', color: '#007BFF'}}>
                 <p>QR Code updates every 60 seconds</p>
             </div>
-
         </div>
-    )
-
+    );
 }
 
 export default QRgen;

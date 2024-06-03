@@ -1,5 +1,6 @@
 package MMM.demo.Resources;
 
+import MMM.demo.Daos.GymDaoImpl;
 import MMM.demo.Entities.Gym;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,10 @@ import java.util.ArrayList;
 @RequestMapping("/gyms")
 @RequiredArgsConstructor
 public class GymsResource {
-    @GetMapping("getopengyms")
+    private final GymDaoImpl gymDaoImpl;
+
+    @GetMapping("/getopengyms")
     ResponseEntity <ArrayList <Gym>> getOpenGyms () {
-        return null;
+        return ResponseEntity.ok(new ArrayList<>(gymDaoImpl.findAll()));
     }
 }

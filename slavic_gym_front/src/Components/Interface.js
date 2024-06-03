@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Route, BrowserRouter as Router, Routes, Link } from 'react-router-dom';
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 
@@ -16,7 +15,11 @@ const Interface = () => {
     useEffect(() => {
         axios.get('http://localhost:8080/gyms/getopengyms')
             .then(response => {
-                setGyms(response.data);
+                if (Array.isArray(response.data)) {
+                    setGyms(response.data);
+                } else {
+                    console.error('API response is not an array:', response.data);
+                }
             })
             .catch(error => {
                 console.error('There was an error fetching the gym data!', error);
@@ -43,7 +46,7 @@ const Interface = () => {
                 <label htmlFor="gym-select" style={{ marginRight: '10px', fontSize: '18px' }}>Choose a gym:</label>
                 <select id="gym-select" value={selectedGym} onChange={handleGymChange} style={{ padding: '10px', fontSize: '16px' }}>
                     <option value="">Select a gym</option>
-                    {gyms.map((gym, index) => (
+                    {Array.isArray(gyms) && gyms.map((gym, index) => (
                         <option key={index} value={gym.id}>{gym.name}</option>
                     ))}
                 </select>

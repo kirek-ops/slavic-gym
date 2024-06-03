@@ -22,6 +22,7 @@ public class AuthResource {
 
     @PostMapping("/login")
     public ResponseEntity <Map <String, Object>> login (@RequestParam String username) {
+
         return ResponseEntity.ok(Map.of("success", true,
                                         "id", "lol",
                                         "password", "lol"));
@@ -36,6 +37,8 @@ public class AuthResource {
     public ResponseEntity <Map <String, Object>> signup (@RequestBody Map <String, Object> body) {
         GymMember user = new GymMember();
 
+        log.info("Received request to create new user: {}", body.toString());
+
         user.setEmail((String) body.get("email"));
         user.setFirst_name((String) body.get("firstName"));
         user.setLast_name((String) body.get("secondName"));
@@ -49,4 +52,4 @@ public class AuthResource {
         return ResponseEntity.ok(Map.of("id", user.getId_member()));
 
     }
-}
+}z

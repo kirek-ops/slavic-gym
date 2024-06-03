@@ -12,6 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import java.time.LocalDate;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 @Repository
 public class ClientMembershipDaoImpl implements ClientMembershipRepository {
 
@@ -28,9 +32,9 @@ public class ClientMembershipDaoImpl implements ClientMembershipRepository {
         @Override
         public ClientMembership mapRow(ResultSet rs, int rowNum) throws SQLException {
             ClientMembership result = new ClientMembership();
-            result.setIdMember(rs.getInt("id_member"));
-            result.setIdMembership(rs.getInt("id_membership"));
-            result.setStartDate(rs.getDate("start_date").toLocalDate());
+            result.setId_member(rs.getInt("id_member"));
+            result.setId_membership(rs.getInt("id_membership"));
+            result.setStart_date(rs.getDate("start_date").toLocalDate());
             return result;
         }
     }

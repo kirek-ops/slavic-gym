@@ -8,15 +8,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TransactionsInventory {
+public class TransactionsMembership {
     private Integer id_transaction;
 
-    private Integer id_item;
+    private Integer id_membership;
 
     private Integer id_member;
 
     private OffsetDateTime order_time;
-
-    private Integer quantity;
 
 }

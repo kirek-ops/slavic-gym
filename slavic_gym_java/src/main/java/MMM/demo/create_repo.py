@@ -20,17 +20,30 @@ with open('../../../../../../slavic_gym_sql/create.sql', 'r') as file:
 table_pattern = re.compile(r'CREATE TABLE (\w+) \((.*?)\);', re.DOTALL)
 field_pattern = re.compile(r'^\s*(\w+)\s+(\w+)[\(\d+\)]*(?:\s+NOT NULL|\s+NULL)?', re.IGNORECASE)
 
-# Mapping from SQL types to Java types
+# Mapping from SQL types to Java wrapper types
 type_mapping = {
-    'INT': 'int',
+    'INT': 'Integer',
     'VARCHAR': 'String',
     'DATE': 'LocalDate',
     'TIMESTAMP': 'LocalDateTime',
-    'TIMESTAMPTZ': 'ZonedDateTime',
-    'BOOLEAN': 'boolean',
+    'TIMESTAMPTZ': 'OffsetDateTime',
+    'BOOLEAN': 'Boolean',
     'DECIMAL': 'BigDecimal',
     'INTERVAL': 'Duration',
     'TIME': 'LocalTime'
+}
+
+# Mapping from Java types to ResultSet getter methods
+result_set_getter_mapping = {
+    'Integer': 'Int',
+    'String': 'String',
+    'LocalDate': 'Date',
+    'LocalDateTime': 'Timestamp',
+    'OffsetDateTime': 'Object',  # Special handling needed
+    'Boolean': 'Boolean',
+    'BigDecimal': 'BigDecimal',
+    'Duration': 'Object',  # Special handling needed
+    'LocalTime': 'Time'
 }
 
 # Parse table definitions
@@ -61,14 +74,10 @@ os.makedirs('./Daos', exist_ok=True)
 entity_template = """
 package MMM.demo.Entities;
 
+{imports}
+
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -104,6 +113,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+{imports}
+
 @Repository
 public class {entity_name}DaoImpl implements {entity_name}Repository {{
 
@@ -130,43 +141,60 @@ public class {entity_name}DaoImpl implements {entity_name}Repository {{
 # Function to convert field name and type to Java field declaration
 def field_declaration(field):
     for name, java_type in field.items():
-        return f"    private {java_type} {name};"
+        return f"    private {java_type} {name};\n"
+
 
 # Function to convert field name to setter calls in RowMapper
 def field_setter(field):
     for name, java_type in field.items():
-        if java_type == 'int':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getInt(\"{name}\"));"
-        elif java_type == 'boolean':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getBoolean(\"{name}\"));"
-        elif java_type == 'String':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getString(\"{name}\"));"
-        elif java_type == 'LocalDate':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getDate(\"{name}\").toLocalDate());"
-        elif java_type == 'LocalDateTime':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getTimestamp(\"{name}\").toLocalDateTime());"
-        elif java_type == 'ZonedDateTime':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getObject(\"{name}\", ZonedDateTime.class));"
+        getter_name = name.capitalize()
+        if java_type == 'OffsetDateTime':
+            return f"            result.set{getter_name}(rs.getObject(\"{name}\", OffsetDateTime.class));"
         elif java_type == 'Duration':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(Duration.ofMillis(rs.getLong(\"{name}\")));"
+            return f"            result.set{getter_name}(Duration.ofMillis(rs.getLong(\"{name}\")));"
+        elif java_type == 'LocalDate':
+            return f"            result.set{getter_name}(rs.getDate(\"{name}\").toLocalDate());"
+        elif java_type == 'LocalDateTime':
+            return f"            result.set{getter_name}(rs.getTimestamp(\"{name}\").toLocalDateTime());"
         elif java_type == 'LocalTime':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getTime(\"{name}\").toLocalTime());"
-        elif java_type == 'BigDecimal':
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getBigDecimal(\"{name}\"));"
+            return f"            result.set{getter_name}(rs.getTime(\"{name}\").toLocalTime());"
         else:
-            return f"            result.set{''.join([word.capitalize() for word in name.split('_')])}(rs.getObject(\"{name}\", {java_type}.class));"
+            rs_getter_method = result_set_getter_mapping[java_type]
+            return f"            result.set{getter_name}(rs.get{rs_getter_method}(\"{name}\"));"
+
+# Function to generate import statements for Java types
+def generate_imports(fields):
+    imports = set()
+    for field in fields:
+        for _, java_type in field.items():
+            if java_type == 'LocalDate':
+                imports.add("import java.time.LocalDate;")
+            elif java_type == 'LocalDateTime':
+                imports.add("import java.time.LocalDateTime;")
+            elif java_type == 'OffsetDateTime':
+                imports.add("import java.time.OffsetDateTime;")
+            elif java_type == 'BigDecimal':
+                imports.add("import java.math.BigDecimal;")
+            elif java_type == 'Duration':
+                imports.add("import java.time.Duration;")
+            elif java_type == 'LocalTime':
+                imports.add("import java.time.LocalTime;")
+    return "\n".join(sorted(imports))
 
 # Generate files for each table
 for table, fields in tables.items():
-    entity_name = ''.join([word.capitalize() for word in table.split('_')])
+    entity_name = ''.join([word.capitalize() for word in re.sub(r's$', '', table).split('_')])
     entity_var = entity_name[0].lower() + entity_name[1:]
 
     # Generate entity fields
     entity_fields = "\n".join([field_declaration(field) for field in fields])
     entity_fields_setters = "\n".join([field_setter(field) for field in fields])
 
+    # Generate imports
+    imports = generate_imports(fields)
+
     # Fill entity template
-    entity_content = entity_template.format(entity_name=entity_name, fields=entity_fields)
+    entity_content = entity_template.format(imports=imports, entity_name=entity_name, fields=entity_fields)
 
     # Write entity to a file
     with open(f"./Entities/{entity_name}.java", "w") as entity_file:
@@ -181,15 +209,18 @@ for table, fields in tables.items():
     with open(f"./Repositories/{entity_name}Repository.java", "w") as repository_file:
         repository_file.write(repository_content)
 
+    # Generate imports for DAO implementation
+    dao_imports = generate_imports(fields)
+    dao_imports += "\nimport java.sql.ResultSet;\nimport java.sql.SQLException;"
+
     # Fill DAO template
     dao_content = dao_template.format(
         entity_name=entity_name,
         table_name=table,
-        fields_setters=entity_fields_setters
+        fields_setters=entity_fields_setters,
+        imports=dao_imports
     )
 
     # Write DAO to a file
     with open(f"./Daos/{entity_name}DaoImpl.java", "w") as dao_file:
         dao_file.write(dao_content)
-
-print("Entity, Repository, and DAO files generated successfully.")

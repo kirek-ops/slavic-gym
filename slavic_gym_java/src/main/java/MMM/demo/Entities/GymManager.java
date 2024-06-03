@@ -8,11 +8,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ClientMembership {
-    private Integer id_member;
+public class GymManager {
+    private Integer id_gym;
 
-    private Integer id_membership;
+    private Integer id_manager;
 
     private LocalDate start_date;
+
+    private LocalDate end_date;
 
 }

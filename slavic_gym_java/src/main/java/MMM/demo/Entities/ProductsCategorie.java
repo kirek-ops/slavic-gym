@@ -8,14 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Inventory {
+public class ProductsCategorie {
     private Integer id_item;
-
-    private String item_name;
-
-    private Integer quantity;
-
-    private Integer id_gym;
 
     private Integer id_category;
 

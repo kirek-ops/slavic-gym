@@ -12,6 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 @Repository
 public class InventoryDaoImpl implements InventoryRepository {
 
@@ -28,11 +32,11 @@ public class InventoryDaoImpl implements InventoryRepository {
         @Override
         public Inventory mapRow(ResultSet rs, int rowNum) throws SQLException {
             Inventory result = new Inventory();
-            result.setIdItem(rs.getInt("id_item"));
-            result.setItemName(rs.getString("item_name"));
+            result.setId_item(rs.getInt("id_item"));
+            result.setItem_name(rs.getString("item_name"));
             result.setQuantity(rs.getInt("quantity"));
-            result.setIdGym(rs.getInt("id_gym"));
-            result.setIdCategory(rs.getInt("id_category"));
+            result.setId_gym(rs.getInt("id_gym"));
+            result.setId_category(rs.getInt("id_category"));
             return result;
         }
     }

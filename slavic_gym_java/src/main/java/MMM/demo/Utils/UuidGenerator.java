@@ -11,6 +11,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class UuidGenerator {
     private static final Logger log = LoggerFactory.getLogger(UuidGenerator.class);
@@ -43,13 +46,15 @@ public class UuidGenerator {
     private static Properties loadProperties() throws IOException {
         log.info("Loading properties");
         Properties properties = new Properties();
-        log.info("Opening file");
-        try (InputStream input = new FileInputStream("slavic_gym_java/src/main/java/MMM/demo/Utils/config.properties")) {
+        Resource resource = new ClassPathResource("config.properties");
+
+        try (InputStream input = resource.getInputStream()) {
             properties.load(input);
-        } catch (FileNotFoundException e) {
-            log.warn("Error: config.properties file not found");
-            throw e; // Rethrow the exception to indicate file not found
+        } catch (IOException e) {
+            log.warn("Error loading config.properties file", e);
+            throw e;
         }
+
         log.info("Properties loaded");
         log.info("properties: " + properties.toString());
         return properties;

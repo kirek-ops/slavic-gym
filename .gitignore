@@ -21,7 +21,7 @@ target/
 
 .env
 slavic_gym_java/src/main/resources/.env
-slavic_gym_java/src/main/java/MMM/demo/Utils/config.properties
+slavic_gym_java/src/main/resources/config.properties
 
 ### NetBeans ###
 /nbproject/private/

@@ -20,6 +20,8 @@ target/
 *.ipr
 
 .env
+slavic_gym_java/src/main/resources/.env
+slavic_gym_java/src/main/java/MMM/demo/Utils/config.properties
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,7 +35,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-
-# Ignore the config.properties file
-config.properties

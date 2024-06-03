@@ -18,7 +18,7 @@ const Login = () => {
                     return;
                 }
                 alert('Login successful');
-                navigate('/interface');
+                navigate('/interface', { state: { id: id, username: username } });
             }
             else {
                 alert('Incorrect login or password');

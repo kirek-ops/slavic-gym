@@ -3,6 +3,8 @@ import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
+import QRgen from "./Components/QRgen";
+import Interface from "./Components/Interface";
 
 function App() {
     return (
@@ -11,6 +13,8 @@ function App() {
                 <Route path="/" element={<h1>Home</h1>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/interface" element={<Interface />} />
+                <Route path="/myqr" element={<QRgen />}/>
                 <Route path="/visits" element={<h1>Visits</h1>} />
                 <Route path="/goals" element={<h1>Goals</h1>} />
                 <Route path="/availibleclasses" element={<h1>availibleclasses</h1>} />

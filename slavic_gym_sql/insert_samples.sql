@@ -36,7 +36,7 @@ INSERT INTO employees (id_employee, first_name, last_name) VALUES
 INSERT INTO member_employees (id_member, id_employee) VALUES
     (1, 1),
     (2, 2),
-    (3, 7);
+    (7, 3);
 
 INSERT INTO employee_positions (id_employee, id_position, start_date, end_date) VALUES
     (1, 1, '2024-01-01', NULL),

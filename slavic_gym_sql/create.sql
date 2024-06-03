@@ -1,4 +1,4 @@
--- Create gyms table
+-- Drop all tables if they exist to start fresh
 CREATE TABLE gyms (
     id_gym INT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -8,14 +8,12 @@ CREATE TABLE gyms (
     contact_number VARCHAR(15)
 );
 
--- Create employees table
 CREATE TABLE employees (
     id_employee INT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL
 );
 
--- Create gym_managers table to track many-to-many relationship with date
 CREATE TABLE gym_managers (
     id_gym INT,
     id_manager INT,
@@ -26,13 +24,11 @@ CREATE TABLE gym_managers (
     FOREIGN KEY (id_manager) REFERENCES employees(id_employee)
 );
 
--- Create positions table
 CREATE TABLE positions (
     id_position INT PRIMARY KEY,
     position_name VARCHAR(50) NOT NULL
 );
 
--- Create employee_positions table to track many-to-many relationship with date
 CREATE TABLE employee_positions (
     id_employee INT,
     id_position INT,
@@ -43,7 +39,6 @@ CREATE TABLE employee_positions (
     FOREIGN KEY (id_position) REFERENCES positions(id_position)
 );
 
--- Create gym_members table
 CREATE TABLE gym_members (
     id_member INT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -53,7 +48,6 @@ CREATE TABLE gym_members (
     join_date DATE NOT NULL
 );
 
--- Create member_employees table to track employees who are also members
 CREATE TABLE member_employees (
     id_member INT,
     id_employee INT,
@@ -62,7 +56,6 @@ CREATE TABLE member_employees (
     FOREIGN KEY (id_employee) REFERENCES employees(id_employee)
 );
 
--- Create classes table with time_from and time_till
 CREATE TABLE classes (
     id_class INT PRIMARY KEY,
     class_name VARCHAR(100) NOT NULL,
@@ -76,7 +69,6 @@ CREATE TABLE classes (
     FOREIGN KEY (id_instructor) REFERENCES employees(id_employee)
 );
 
--- Create bookings table
 CREATE TABLE bookings (
     id_booking INT PRIMARY KEY,
     id_member INT,
@@ -85,24 +77,38 @@ CREATE TABLE bookings (
     FOREIGN KEY (id_class) REFERENCES classes(id_class)
 );
 
--- Create inventory table
+CREATE TABLE categories (
+    id_category INT PRIMARY KEY,
+    category_name VARCHAR(100) NOT NULL,
+    parent_category_id INT,
+    FOREIGN KEY (parent_category_id) REFERENCES categories(id_category)
+);
+
 CREATE TABLE inventory (
     id_item INT PRIMARY KEY,
     item_name VARCHAR(100) NOT NULL,
     quantity INT NOT NULL,
     id_gym INT,
-    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym)
+    id_category INT,
+    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym),
+    FOREIGN KEY (id_category) REFERENCES categories(id_category)
 );
 
--- Create memberships table
+CREATE TABLE products_categories (
+    id_item INT,
+    id_category INT,
+    PRIMARY KEY (id_item, id_category),
+    FOREIGN KEY (id_item) REFERENCES inventory(id_item),
+    FOREIGN KEY (id_category) REFERENCES categories(id_category)
+);
+
 CREATE TABLE memberships (
     id_membership INT PRIMARY KEY,
     is_active BOOLEAN NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    duration INT NOT NULL -- DAYS
+    duration INT NOT NULL
 );
 
--- Create client_membership table to track membership start dates
 CREATE TABLE client_membership (
     id_member INT,
     id_membership INT,
@@ -112,7 +118,6 @@ CREATE TABLE client_membership (
     FOREIGN KEY (id_membership) REFERENCES memberships(id_membership)
 );
 
--- Create transactions for memberships table
 CREATE TABLE transactions_memberships (
     id_transaction INT PRIMARY KEY,
     id_membership INT,
@@ -122,7 +127,6 @@ CREATE TABLE transactions_memberships (
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member)
 );
 
--- Create transactions for inventory table
 CREATE TABLE transactions_inventory (
     id_transaction INT PRIMARY KEY,
     id_item INT,
@@ -131,4 +135,67 @@ CREATE TABLE transactions_inventory (
     quantity INT NOT NULL,
     FOREIGN KEY (id_item) REFERENCES inventory(id_item),
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member)
+);
+
+CREATE TABLE access_codes (
+    code_id VARCHAR(50) PRIMARY KEY,
+    generated_at TIMESTAMPTZ NOT NULL,
+    id_member INT,
+    first_used_at TIMESTAMPTZ,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member)
+);
+
+CREATE TABLE visits (
+    id_visit INT PRIMARY KEY,
+    id_member INT,
+    visit_time TIMESTAMPTZ NOT NULL,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member)
+);
+
+CREATE TABLE repetition_exercises (
+    id_exercise INT PRIMARY KEY,
+    exercise_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE time_exercises (
+    id_exercise INT PRIMARY KEY,
+    exercise_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE repetition_goals (
+    id_goal INT PRIMARY KEY,
+    id_member INT,
+    id_exercise INT,
+    target_reps INT NOT NULL,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
+    FOREIGN KEY (id_exercise) REFERENCES repetition_exercises(id_exercise)
+);
+
+CREATE TABLE time_goals (
+    id_goal INT PRIMARY KEY,
+    id_member INT,
+    id_exercise INT,
+    target_time INTERVAL NOT NULL,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
+    FOREIGN KEY (id_exercise) REFERENCES time_exercises(id_exercise)
+);
+
+CREATE TABLE exercise_logs_repetitions (
+    id_log INT PRIMARY KEY,
+    id_member INT,
+    id_goal INT,
+    log_date TIMESTAMPTZ NOT NULL,
+    reps_done INT NOT NULL,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
+    FOREIGN KEY (id_goal) REFERENCES repetition_goals(id_goal)
+);
+
+CREATE TABLE exercise_logs_time (
+    id_log INT PRIMARY KEY,
+    id_member INT,
+    id_goal INT,
+    log_date TIMESTAMPTZ NOT NULL,
+    time_done INTERVAL NOT NULL,
+    FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
+    FOREIGN KEY (id_goal) REFERENCES time_goals(id_goal)
 );

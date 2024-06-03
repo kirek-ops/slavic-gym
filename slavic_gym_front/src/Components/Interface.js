@@ -13,17 +13,6 @@ const Interface = () => {
     const [selectedGym, setSelectedGym] = useState('');
     const [userLocation, setUserLocation] = useState(null);
 
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-
-    useEffect(() => {
-        // Check if token exists in local storage
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-
     useEffect(() => {
         // Get user geolocation
         navigator.geolocation.getCurrentPosition(
@@ -65,20 +54,20 @@ const Interface = () => {
                         distance: distance
                     };
                 }));
-    
+
                 const sortedGyms = updatedGyms.sort((a, b) => a.distance - b.distance);
                 setGyms(sortedGyms);
             } catch (error) {
                 console.error('Error fetching gym locations:', error);
             }
         };
-    
+
         const interval = setInterval(fetchGymLocations, 10000); // Fetch every 10 seconds
-    
+
         return () => clearInterval(interval); // Cleanup function to clear the interval
-    
+
     }, [userLocation, gyms]);
-    
+
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const toRad = (value) => (value * Math.PI) / 180;
@@ -93,6 +82,7 @@ const Interface = () => {
         const distance = R * c; // Distance in km
         return distance;
     };
+
 
     const handleGymChange = (event) => {
         setSelectedGym(event.target.value);
@@ -111,23 +101,7 @@ const Interface = () => {
     }
 
     const handleVisitsButton = () => {
-        navigate('/visits', { state: { id: id, email: email, gym: selectedGym } });
-    };
-
-    const handleLogout = () => {
-        // Clear token from local storage
-        localStorage.removeItem('token');
-        setIsLoggedIn(false);
-        navigate('/login');
-    };
-
-    if (!isLoggedIn) {
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-                <h1>You are not logged in</h1>
-                <button onClick={() => navigate('/login')}>Login</button>
-            </div>
-        );
+        navigate('/visits', { state: { id: id, email: email } });
     }
 
     return (
@@ -176,19 +150,19 @@ const Interface = () => {
             </button>
 
             <button style={{
+                marginTop: '20px',
                 padding: '10px 20px',
                 fontSize: '16px',
                 backgroundColor: '#007BFF',
                 color: 'white',
                 border: 'none',
                 borderRadius: '5px',
-                cursor: 'pointer',
-                marginTop: '20px'
-            }} onClick={handleLogout}>
-                Logout
+                cursor: 'pointer'
+            }} onClick={handleMembershipShopClick}>
+                My memberships
             </button>
         </div>
-);
+    );
 }
 
 export default Interface;

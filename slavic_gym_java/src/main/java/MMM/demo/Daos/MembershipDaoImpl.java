@@ -1,4 +1,3 @@
-
 package MMM.demo.Daos;
 
 import MMM.demo.Entities.Membership;
@@ -12,10 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 @Repository
 public class MembershipDaoImpl implements MembershipRepository {
 
@@ -28,10 +23,24 @@ public class MembershipDaoImpl implements MembershipRepository {
         return jdbcTemplate.query(sql, new MembershipRowMapper());
     }
 
+    public List<Membership> findByMemberId(Integer id) {
+        String sql = "SELECT m.* FROM memberships m " +
+                "JOIN client_membership cm ON m.id_membership = cm.id_membership " +
+                "WHERE cm.id_member = ?";
+        return jdbcTemplate.query(sql, new MembershipRowMapper(), id);
+    }
+
+    public boolean buyMembership(Integer memberId, Integer membershipId) {
+        String sql = "INSERT INTO client_membership (id_member, id_membership, start_date) VALUES (?, ?, CURRENT_DATE)";
+        int rowsAffected = jdbcTemplate.update(sql, memberId, membershipId);
+        return rowsAffected > 0;
+    }
+
     private static class MembershipRowMapper implements RowMapper<Membership> {
         @Override
         public Membership mapRow(ResultSet rs, int rowNum) throws SQLException {
             Membership result = new Membership();
+            result.setName(rs.getString("name"));
             result.setId_membership(rs.getInt("id_membership"));
             result.setIs_active(rs.getBoolean("is_active"));
             result.setPrice(rs.getBigDecimal("price"));

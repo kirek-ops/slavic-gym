@@ -6,7 +6,8 @@ import Signup from './Components/Signup';
 import QRgen from "./Components/QRgen";
 import Interface from "./Components/Interface";
 import Home from './Components/Home';
-import Visits from "./Components/Visits";
+import Visits from './Components/Visits';
+import Membership from './Components/MembershipShop';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/goals" element={<h1>Goals</h1>} />
                 <Route path="/availibleclasses" element={<h1>availibleclasses</h1>} />
                 <Route path="/profile" element={<h1>Profile</h1>} />
+                <Route path="/membershipshop" element={<Membership />} />
             </Routes>
         </Router>
     );

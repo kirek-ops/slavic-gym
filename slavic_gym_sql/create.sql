@@ -104,6 +104,7 @@ CREATE TABLE products_categories (
 );
 
 CREATE TABLE memberships (
+    name VARCHAR(100) NOT NULL,
     id_membership INT PRIMARY KEY,
     is_active BOOLEAN NOT NULL,
     price DECIMAL(10, 2) NOT NULL,

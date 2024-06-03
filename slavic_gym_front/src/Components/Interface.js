@@ -105,13 +105,13 @@ const Interface = () => {
 
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh'
-        }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh'
+            }}>
             <h1 style={{marginBottom: '30px', color: '#007BFF'}}>Welcome to the Gym App</h1>
 
             <div style={{marginBottom: '20px'}}>
@@ -134,18 +134,8 @@ const Interface = () => {
                 borderRadius: '5px',
                 cursor: 'pointer'
             }} onClick={handleQRButtonClick}>
-            <button style={{
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleQRButtonClick}>
                 Get My QR Code
             </button>
-
             <button style={{
                 padding: '10px 20px',
                 fontSize: '16px',
@@ -157,19 +147,6 @@ const Interface = () => {
                 marginTop: '20px'
             }} onClick={handleVisitsButton}>
                 See my visits
-            </button>
-
-            <button style={{
-                marginTop: '20px',
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleMembershipShopClick}>
-                My memberships
             </button>
         </div>
     );

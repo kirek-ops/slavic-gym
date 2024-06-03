@@ -8,12 +8,13 @@ const QRgen = () => {
 
     const id = location.state.id;
     const username = location.state.username;
+    const gym = location.state.gym;
 
     const [QRValue, setQRValue] = useState('');
 
     const generateQRValue = () => {
         const currentTime = new Date().getTime();
-        setQRValue(`UserID: ${id}, Time: ${currentTime}`);
+        setQRValue(`UserID: ${id}, Time: ${currentTime}, Gym: ${gym}`);
     }
 
     useEffect(() => {

@@ -1,0 +1,52 @@
+/* MembershipShop.css */
+
+.membership-shop-container {
+    padding: 20px;
+}
+
+.membership-shop-header {
+    color: #007BFF;
+    text-align: center;
+}
+
+.membership-list {
+    list-style: none;
+    padding: 0;
+}
+
+.membership-item {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.membership-details {
+    margin-bottom: 10px;
+}
+
+.membership-name {
+    margin: 0;
+}
+
+.membership-active {
+    margin: 0;
+}
+
+.membership-price {
+    margin: 0;
+}
+
+.membership-duration {
+    margin: 0;
+}
+
+.buy-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

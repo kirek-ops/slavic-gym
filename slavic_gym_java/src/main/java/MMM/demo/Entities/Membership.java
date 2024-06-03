@@ -9,6 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Membership {
+    private String name;
+
     private Integer id_membership;
 
     private Boolean is_active;

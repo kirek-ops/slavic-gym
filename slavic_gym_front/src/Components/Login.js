@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post(`http://localhost:8080/auth/login?username=${username}`);
+            const response = await axios.post(`http://localhost:8080/auth/login?email=${email}`);
             if (response.data.success) {
                 const { id, correctPassword } = response.data;
                 if (!await bcrypt.compare(password, correctPassword)) {
@@ -18,7 +18,7 @@ const Login = () => {
                     return;
                 }
                 alert('Login successful');
-                navigate('/interface', { state: { id: id, username: username } });
+                navigate('/interface', { state: { id: id, email: email } });
             }
             else {
                 alert('Incorrect login or password');
@@ -32,8 +32,8 @@ const Login = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <label style={{ marginBottom: '10px' }}>Username:</label>
-            <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
+            <label style={{ marginBottom: '10px' }}>Email:</label>
+            <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
             <br/>
 
             <label style={{ marginBottom: '10px' }}>Password:</label>

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.UUID;
+
+import MMM.demo.Utils.UuidGenerator;
 
 @Slf4j
 @RestController
@@ -18,7 +19,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthResource {
     private final GymMemberDaoImpl gymMemberDaoImpl;
-    private Integer idCounter = 0;
 
     @PostMapping("/login")
     public ResponseEntity <Map <String, Object>> login (@RequestParam String email) {
@@ -52,7 +52,13 @@ public class AuthResource {
         user.setPhone_number((String) body.get("phone"));
         user.setJoin_date(LocalDate.now());
         user.setPasswd((String) body.get("password"));
-        user.setId_member(idCounter++);
+
+        try {
+            user.setId_member(UuidGenerator.generateUniqueID());
+        } catch (Exception e) {
+            log.info("Error while assigning id. Aborting.");
+            return ResponseEntity.notFound().build();
+        }
 
         gymMemberDaoImpl.createGymMember(user);
 

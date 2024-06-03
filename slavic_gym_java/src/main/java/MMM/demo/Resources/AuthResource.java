@@ -21,16 +21,23 @@ public class AuthResource {
     private Integer idCounter = 0;
 
     @PostMapping("/login")
-    public ResponseEntity <Map <String, Object>> login (@RequestParam String username) {
-
-        return ResponseEntity.ok(Map.of("success", true,
-                                        "id", "lol",
-                                        "password", "lol"));
+    public ResponseEntity <Map <String, Object>> login (@RequestParam String email) {
+        GymMember user = gymMemberDaoImpl.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.ok(Map.of("success", false));
+        } else {
+            return ResponseEntity.ok(Map.of("success", true,
+                                            "id", user.getId_member(),
+                                            "correctPassword", user.getPasswd()));
+        }
     }
 
     @PostMapping("/checkUserExists")
     public ResponseEntity <Map <String, Object>> checkUserExists (@RequestBody Map <String, Object> body) {
-        return ResponseEntity.ok(Map.of("success", true));
+        return ResponseEntity.ok(Map.of(
+            "success", 
+            gymMemberDaoImpl.existsMember((String)body.get("email"), (String)body.get("phone"))
+        ));
     }
 
     @PostMapping("/signup")
@@ -52,4 +59,4 @@ public class AuthResource {
         return ResponseEntity.ok(Map.of("id", user.getId_member()));
 
     }
-}z
+}

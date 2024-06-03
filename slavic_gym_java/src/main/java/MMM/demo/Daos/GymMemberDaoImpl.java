@@ -34,6 +34,20 @@ public class GymMemberDaoImpl implements GymMemberRepository {
         jdbcTemplate.update(sql, gymMember.getId_member(), gymMember.getFirst_name(), gymMember.getLast_name(), gymMember.getEmail(), gymMember.getPhone_number(), gymMember.getJoin_date(), gymMember.getPasswd());
     }
 
+    // Find by email gym member
+    public GymMember findByEmail(String email) {
+        String sql = "SELECT * FROM gym_members WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, new GymMemberRowMapper(), email);
+    }
+
+    public Boolean existsMember(String email, String phone) {
+        // System.out.println("A!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        String sql = "SELECT COUNT(*) FROM gym_members WHERE email LIKE ? OR phone_number LIKE ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new String[]{email, phone}, Integer.class);
+        // System.out.println("B!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return count != null && count > 0;
+    }
+
     private static class GymMemberRowMapper implements RowMapper<GymMember> {
         @Override
         public GymMember mapRow(ResultSet rs, int rowNum) throws SQLException {

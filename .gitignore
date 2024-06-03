@@ -36,4 +36,4 @@ build/
 
 
 # Ignore the config.properties file
-# config.properties
+config.properties

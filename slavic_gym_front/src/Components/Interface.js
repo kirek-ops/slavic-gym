@@ -13,6 +13,17 @@ const Interface = () => {
     const [selectedGym, setSelectedGym] = useState('');
     const [userLocation, setUserLocation] = useState(null);
 
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    useEffect(() => {
+        // Check if token exists in local storage
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
+
     useEffect(() => {
         // Get user geolocation
         navigator.geolocation.getCurrentPosition(
@@ -103,6 +114,21 @@ const Interface = () => {
         navigate('/visits', { state: { id: id, email: email, gym: selectedGym } });
     };
 
+    const handleLogout = () => {
+        // Clear token from local storage
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        navigate('/login');
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+                <h1>You are not logged in</h1>
+                <button onClick={() => navigate('/login')}>Login</button>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -134,18 +160,8 @@ const Interface = () => {
                 borderRadius: '5px',
                 cursor: 'pointer'
             }} onClick={handleQRButtonClick}>
-            <button style={{
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleQRButtonClick}>
                 Get My QR Code
             </button>
-
             <button style={{
                 padding: '10px 20px',
                 fontSize: '16px',
@@ -160,19 +176,19 @@ const Interface = () => {
             </button>
 
             <button style={{
-                marginTop: '20px',
                 padding: '10px 20px',
                 fontSize: '16px',
                 backgroundColor: '#007BFF',
                 color: 'white',
                 border: 'none',
                 borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleMembershipShopClick}>
-                My memberships
+                cursor: 'pointer',
+                marginTop: '20px'
+            }} onClick={handleLogout}>
+                Logout
             </button>
         </div>
-    );
+);
 }
 
 export default Interface;

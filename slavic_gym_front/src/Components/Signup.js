@@ -17,7 +17,7 @@ const SignupPage = () => {
             const response = await axios.post('http://localhost:8080/auth/checkUserExists', {
                 email, phone
             });
-            return response.data.exists;
+            return !response.data.success;
         } catch (error) {
             console.error('Error checking user existence:', error);
             return false;

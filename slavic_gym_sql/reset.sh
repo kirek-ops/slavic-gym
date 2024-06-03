@@ -13,7 +13,7 @@ DB_NAME="${DB_NAME}"
 DB_USER="${DB_USER}"
 
 # SQL files
-SQL_FILES=("clear.sql" "create.sql" "sequences.sql" "insert_samples.sql")
+SQL_FILES=("clear.sql" "sequences.sql" "create.sql" "insert_samples.sql")
 
 # Execute each SQL file
 for sql_file in "${SQL_FILES[@]}"; do

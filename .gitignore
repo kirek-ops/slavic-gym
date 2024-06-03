@@ -20,6 +20,7 @@ target/
 *.ipr
 
 .env
+slavic_gym_java/src/main/resources/.env
 
 ### NetBeans ###
 /nbproject/private/

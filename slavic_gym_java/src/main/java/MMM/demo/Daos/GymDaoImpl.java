@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,6 +25,12 @@ public class GymDaoImpl implements GymRepository {
     public List<Gym> findAll() {
         String sql = "SELECT * FROM gyms";
         return jdbcTemplate.query(sql, new GymRowMapper());
+    }
+
+    public Gym findById(Integer id) {
+        String sql = "SELECT * FROM gyms WHERE id_gym = ?";
+        Gym result = jdbcTemplate.queryForObject(sql, new Integer[]{id}, new GymRowMapper());
+        return result;
     }
 
     private static class GymRowMapper implements RowMapper<Gym> {

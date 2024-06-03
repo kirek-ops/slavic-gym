@@ -1,13 +1,9 @@
 
-package Repositories;
+package MMM.demo.Repositories;
 
-import Entities.Categories;
+import MMM.demo.Entities.Categories;
 import java.util.List;
 
 public interface CategoriesRepository {
     List<Categories> findAll();
-    Categories findById();
-    int addCategories(Categories categories);
-    int updateCategories(Categories categories);
-    int deleteCategories();
 }

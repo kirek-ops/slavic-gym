@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class RepetitionExercises {
+    private int id_exercise;
     private String exercise_name;
 }

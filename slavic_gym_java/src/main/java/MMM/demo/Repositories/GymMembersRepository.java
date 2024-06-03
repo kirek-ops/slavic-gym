@@ -1,13 +1,9 @@
 
-package Repositories;
+package MMM.demo.Repositories;
 
-import Entities.GymMembers;
+import MMM.demo.Entities.GymMembers;
 import java.util.List;
 
 public interface GymMembersRepository {
     List<GymMembers> findAll();
-    GymMembers findById();
-    int addGymMembers(GymMembers gymMembers);
-    int updateGymMembers(GymMembers gymMembers);
-    int deleteGymMembers();
 }

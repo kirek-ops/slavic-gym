@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;

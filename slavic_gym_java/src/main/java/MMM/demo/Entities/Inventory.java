@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Inventory {
+    private int id_item;
     private String item_name;
     private int quantity;
     private int id_gym;

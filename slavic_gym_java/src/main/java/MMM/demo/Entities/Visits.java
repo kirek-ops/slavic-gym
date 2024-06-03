@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Visits {
+    private int id_visit;
     private int id_member;
     private ZonedDateTime visit_time;
 }

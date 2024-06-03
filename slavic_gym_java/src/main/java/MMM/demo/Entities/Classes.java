@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Classes {
+    private int id_class;
     private String class_name;
     private LocalDateTime schedule;
     private LocalTime time_from;

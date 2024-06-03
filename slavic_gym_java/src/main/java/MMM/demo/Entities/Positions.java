@@ -1,5 +1,5 @@
 
-package Entities;
+package MMM.demo.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Positions {
+    private int id_position;
     private String position_name;
 }

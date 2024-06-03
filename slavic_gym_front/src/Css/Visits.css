@@ -1,0 +1,33 @@
+/* Visits.css */
+.visits-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.visits-header {
+    text-align: center;
+    color: #333;
+}
+
+.visit {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.visit h2 {
+    margin: 0 0 10px;
+    color: #007bff;
+}
+
+.visit p {
+    margin: 0;
+    color: #666;
+}

@@ -1,8 +1,16 @@
 #!/bin/bash
 
+# Load environment variables from .env file
+if [[ -f .env ]]; then
+    export $(grep -v '^#' .env | xargs)
+else
+    echo ".env file not found!"
+    exit 1
+fi
+
 # Database credentials
-DB_NAME="slavic_gym"
-DB_USER="postgres"
+DB_NAME="${DB_NAME}"
+DB_USER="${DB_USER}"
 
 # SQL files
 SQL_FILES=("clear.sql" "create.sql" "sequences.sql" "insert_samples.sql")

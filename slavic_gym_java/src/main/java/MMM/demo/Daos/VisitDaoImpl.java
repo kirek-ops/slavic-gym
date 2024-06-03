@@ -28,6 +28,12 @@ public class VisitDaoImpl implements VisitRepository {
         return jdbcTemplate.query(sql, new VisitRowMapper());
     }
 
+    @Override
+    public List<Visit> findByMemberId(Integer id_member) {
+        String sql = "SELECT * FROM visits WHERE id_member = ?";
+        return jdbcTemplate.query(sql, new VisitRowMapper(), id_member);
+    }
+
     private static class VisitRowMapper implements RowMapper<Visit> {
         @Override
         public Visit mapRow(ResultSet rs, int rowNum) throws SQLException {

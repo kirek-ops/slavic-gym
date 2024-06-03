@@ -38,13 +38,25 @@ const Interface = () => {
         }
     };
 
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <h1 style={{ marginBottom: '30px', color: '#007BFF' }}>Welcome to the Gym App</h1>
+    const handleVisitsButton = () => {
+        navigate('/visits', { state: { id: id, email: email, gym: selectedGym } });
+    };
 
-            <div style={{ marginBottom: '20px' }}>
-                <label htmlFor="gym-select" style={{ marginRight: '10px', fontSize: '18px' }}>Choose a gym:</label>
-                <select id="gym-select" value={selectedGym} onChange={handleGymChange} style={{ padding: '10px', fontSize: '16px' }}>
+
+    return (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh'
+        }}>
+            <h1 style={{marginBottom: '30px', color: '#007BFF'}}>Welcome to the Gym App</h1>
+
+            <div style={{marginBottom: '20px'}}>
+                <label htmlFor="gym-select" style={{marginRight: '10px', fontSize: '18px'}}>Choose a gym:</label>
+                <select id="gym-select" value={selectedGym} onChange={handleGymChange}
+                        style={{padding: '10px', fontSize: '16px'}}>
                     <option value="">Select a gym</option>
                     {Array.isArray(gyms) && gyms.map((gym, index) => (
                         <option key={index} value={gym.id}>{gym.name}</option>
@@ -52,8 +64,29 @@ const Interface = () => {
                 </select>
             </div>
 
-            <button style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }} onClick={handleQRButtonClick}>
+            <button style={{
+                padding: '10px 20px',
+                fontSize: '16px',
+                backgroundColor: '#007BFF',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+            }} onClick={handleQRButtonClick}>
                 Get My QR Code
+            </button>
+
+            <button style={{
+                padding: '10px 20px',
+                fontSize: '16px',
+                backgroundColor: '#007BFF',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginTop: '20px'
+            }} onClick={handleVisitsButton}>
+                See my visits
             </button>
         </div>
     );

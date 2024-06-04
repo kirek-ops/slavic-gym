@@ -21,9 +21,10 @@ const MembershipShop = () => {
             }
 
             // Fetch user's active memberships
-            const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id: id });
+            const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id });
             if (Array.isArray(userMembershipsResponse.data)) {
                 setUserMemberships(userMembershipsResponse.data);
+                console.log('User memberships:', userMembershipsResponse.data);
             } else {
                 console.error('API response is not an array:', userMembershipsResponse.data);
             }
@@ -34,7 +35,7 @@ const MembershipShop = () => {
 
     useEffect(() => {
         fetchData();
-    }, [id]);
+    }, [id, hasBeenTransaction]);
 
     const handleBuy = async (membershipId) => {
         try {
@@ -44,17 +45,7 @@ const MembershipShop = () => {
             });
             if (response.data.success) {
                 alert('Membership purchased successfully!');
-
-                setHasBeenTransaction(hasBeenTransaction + 1);
-                fetchData();
-
-                // Refresh user's memberships after purchase
-                const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id });
-                if (Array.isArray(userMembershipsResponse.data)) {
-                    setUserMemberships(userMembershipsResponse.data);
-                } else {
-                    console.error('API response is not an array:', userMembershipsResponse.data);
-                }
+                setHasBeenTransaction(prev => prev + 1);
             } else {
                 alert('Failed to purchase membership.');
             }
@@ -62,6 +53,31 @@ const MembershipShop = () => {
             console.error('Error purchasing membership:', error);
             alert('Error purchasing membership.');
         }
+    };
+
+    const handleProlong = async (membershipId) => {
+        try {
+            const response = await axios.post('http://localhost:8080/memberships/prolong', {
+                memberId: id,
+                membershipId
+            });
+            if (response.data.success) {
+                alert('Membership prolonged successfully!');
+                setHasBeenTransaction(prev => prev + 1);
+            } else {
+                alert('Failed to prolong membership.');
+            }
+        } catch (error) {
+            console.error('Error prolonging membership:', error);
+            alert('Error prolonging membership.');
+        }
+    };
+
+    const isExpired = (membership) => {
+        const currentDate = new Date();
+        const startDate = new Date(membership.start_date);
+        const expirationDate = new Date(startDate.getTime() + membership.duration * 24 * 60 * 60 * 1000);
+        return currentDate > expirationDate;
     };
 
     return (
@@ -76,7 +92,11 @@ const MembershipShop = () => {
                             <p className="membership-active">Active: {membership.is_active ? "Yes" : "No"}</p>
                             <p className="membership-price">Price: ${membership.price}</p>
                             <p className="membership-duration">Duration: {membership.duration} days</p>
+                            <p className="membership-expiration">Expiration Date: {new Date(new Date(membership.start_date).getTime() + (membership.duration * 24 * 60 * 60 * 1000)).toLocaleDateString()}</p>
                         </div>
+                        {membership.is_active && isExpired(membership) && (
+                            <button onClick={() => handleProlong(membership.id_membership)} className="prolong-button">Prolong</button>
+                        )}
                     </li>
                 ))}
             </ul>
@@ -94,7 +114,6 @@ const MembershipShop = () => {
                     </li>
                 ))}
             </ul>
-
         </div>
     );
 };

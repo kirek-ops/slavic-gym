@@ -8,6 +8,7 @@ import Interface from "./Components/Interface";
 import Home from './Components/Home';
 import Visits from './Components/Visits';
 import Membership from './Components/MembershipShop';
+import ClassSubmition from './Components/ClassSubmition';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/availibleclasses" element={<h1>availibleclasses</h1>} />
                 <Route path="/profile" element={<h1>Profile</h1>} />
                 <Route path="/membershipshop" element={<Membership />} />
+                <Route path="/submit-classes" element={<ClassSubmition />} />
             </Routes>
         </Router>
     );

@@ -10,6 +10,7 @@ const SignupPage = () => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [id, setId] = useState('');
+    const [positions, setPositions] = useState([]);
     const navigate = useNavigate();
 
     const checkUserExists = async () => {

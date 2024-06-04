@@ -13,6 +13,8 @@ const Interface = () => {
     const [gyms, setGyms] = useState([]);
     const [selectedGym, setSelectedGym] = useState('');
     const [userLocation, setUserLocation] = useState(null);
+    const [positions, setPositions] = useState(null);
+    const [hasPosition, setHasPosition] = useState({});
 
     useEffect(() => {
         // Get user geolocation
@@ -42,6 +44,35 @@ const Interface = () => {
                 console.error('There was an error fetching the gym data!', error);
             });
     }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(`http://localhost:8080/employees/${id}/get-positions`);
+                console.log(response.data);
+                setPositions(response.data);
+            } catch (error) {
+                console.log("Error while obtaining positions");
+            }
+        }
+        fetchData();
+    }, [id]);
+
+    useEffect(() => {
+        if (positions) {
+          const newHasPositions = Object.entries(positions).reduce((acc, [key, value]) => {
+            if (!acc[value]) {
+              acc[value] = [];
+            }
+            acc[value].push(parseInt(key));
+            return acc;
+          }, {});
+          setHasPosition(newHasPositions);
+        } else {
+          setHasPosition({});
+        }
+        console.log(hasPosition);
+    }, [positions]);
 
     useEffect(() => {
         const fetchGymLocations = async () => {
@@ -103,6 +134,10 @@ const Interface = () => {
 
     const handleVisitsButton = () => {
         navigate('/visits', { state: { id: id, email: email } });
+    }
+
+    const handleSubmitClass = () => {
+        navigate('/submit-classes', { state: { id: id, hasPosition: hasPosition, gyms: gyms } });
     }
 
     return (

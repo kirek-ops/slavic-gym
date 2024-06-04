@@ -31,17 +31,14 @@ VALUES
 INSERT INTO employees (id_employee, first_name, last_name) VALUES
     (1, 'John', 'Doe'),
     (2, 'Jane', 'Smith'),
-    (3, 'David', 'Martinez');
+    (7, 'David', 'Martinez');
 
-INSERT INTO member_employees (id_member, id_employee) VALUES
-    (1, 1),
-    (2, 2),
-    (7, 3);
-
-INSERT INTO employee_positions (id_employee, id_position, start_date, end_date) VALUES
-    (1, 1, '2024-01-01', NULL),
-    (2, 2, '2023-11-07', '2024-10-11'),
-    (3, 4, '2019-03-08', NULL);
+INSERT INTO employee_positions (id_employee, id_position, id_gym, start_date, end_date) VALUES
+    (1, 1, 1, '2024-01-01', NULL),
+    (2, 3, 2, '2023-11-07', '2024-10-11'),
+    (2, 1, 5, '2023-11-07', NULL),
+    (2, 5, 3, '2023-11-07', '2024-10-11'),
+    (7, 4, 4, '2019-03-08', NULL);
 
 INSERT INTO memberships (name, id_membership, is_active, price, duration) VALUES
     ('SUMMER FRESH', 1, true, 50.00, 30),

@@ -8,37 +8,6 @@ CREATE TABLE gyms (
     contact_number VARCHAR(15)
 );
 
-CREATE TABLE employees (
-    id_employee INT PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE gym_managers (
-    id_gym INT,
-    id_manager INT,
-    start_date DATE NOT NULL,
-    end_date DATE,
-    PRIMARY KEY (id_gym, id_manager, start_date),
-    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym),
-    FOREIGN KEY (id_manager) REFERENCES employees(id_employee)
-);
-
-CREATE TABLE positions (
-    id_position INT PRIMARY KEY,
-    position_name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE employee_positions (
-    id_employee INT,
-    id_position INT,
-    start_date DATE NOT NULL,
-    end_date DATE,
-    PRIMARY KEY (id_employee, id_position, start_date),
-    FOREIGN KEY (id_employee) REFERENCES employees(id_employee),
-    FOREIGN KEY (id_position) REFERENCES positions(id_position)
-);
-
 CREATE TABLE gym_members (
     id_member INT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -49,12 +18,28 @@ CREATE TABLE gym_members (
     passwd VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE member_employees (
-    id_member INT,
+CREATE TABLE employees (
+    id_employee INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_employee) REFERENCES gym_members(id_member)
+);
+
+CREATE TABLE positions (
+    id_position INT PRIMARY KEY,
+    position_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE employee_positions (
     id_employee INT,
-    PRIMARY KEY (id_member, id_employee),
-    FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
-    FOREIGN KEY (id_employee) REFERENCES employees(id_employee)
+    id_position INT,
+    id_gym INT,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    PRIMARY KEY (id_employee, id_position, id_gym, start_date),
+    FOREIGN KEY (id_employee) REFERENCES employees(id_employee),
+    FOREIGN KEY (id_position) REFERENCES positions(id_position),
+    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym)
 );
 
 CREATE TABLE classes (

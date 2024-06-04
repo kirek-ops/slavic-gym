@@ -157,6 +157,7 @@ const Interface = () => {
             <button className="button" onClick={handleQRButtonClick}>Get My QR Code</button>
             <button className="button" onClick={handleVisitsButton}>See my visits</button>
             <button className="button" onClick={handleMembershipShopClick}>My memberships</button>
+            { hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleSubmitClass}>Submit class</button>) : null}
         </div>
     );
 }

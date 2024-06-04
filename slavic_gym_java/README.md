@@ -1,4 +1,4 @@
 # SQL-project
 SQL project (second semester) 
 
-![Schema](./images/schema.png)
+![Schema](./images/new_shcema.png)

@@ -45,5 +45,5 @@ INSERT INTO employee_positions (id_employee, id_position, start_date, end_date) 
 
 INSERT INTO memberships (name, id_membership, is_active, price, duration) VALUES
     ('SUMMER FRESH', 1, true, 50.00, 30),
-    ('LOL WEAK PUSSY', 2, true, 100.00, 90),
-    ('KEK', 3, false, 150.00, 180);
+    ('SUMMER SUPER FRESH', 2, true, 100.00, 90),
+    ('ID_TOP', 3, false, 150.00, 180);

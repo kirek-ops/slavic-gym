@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Update import
 import axios from 'axios';
 import '../Css/MembershipShop.css'; // Import CSS file
 
 const MembershipShop = () => {
     const location = useLocation();
+    const navigate = useNavigate(); // Replace useHistory with useNavigate
     const { id, email } = location.state;
     const [memberships, setMemberships] = useState([]);
     const [userMemberships, setUserMemberships] = useState([]);
@@ -62,7 +63,6 @@ const MembershipShop = () => {
         }
     };
 
-
     const isExpired = (membership) => {
         const currentDate = new Date();
         const startDate = new Date(membership.start_date);
@@ -111,6 +111,11 @@ const MembershipShop = () => {
         }
     };
 
+    // Handle return button click
+    const handleReturnClick = () => {
+        navigate('/interface', { state: { id: id, email: email } });
+    };
+
     return (
         <div className="membership-shop-container">
             <h1 className="membership-shop-header">Memberships for {email}</h1>
@@ -145,6 +150,7 @@ const MembershipShop = () => {
                     </li>
                 ))}
             </ul>
+            <button onClick={handleReturnClick} className="return-button">Return</button> {/* Add return button */}
         </div>
     );
 };

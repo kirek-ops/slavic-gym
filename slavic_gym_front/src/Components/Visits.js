@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import '../Css/Visits.css';
 
 const Visits = () => {
     const [visits, setVisits] = useState([]);
     const location = useLocation();
+    const navigate = useNavigate();
     const id = location.state.id; // Assuming the ID is passed via route state
 
     useEffect(() => {
@@ -23,6 +24,10 @@ const Visits = () => {
         fetchVisits();
     }, [id]); // Adding id as a dependency ensures the effect runs when id changes
 
+    const handleReturnClick = () => {
+        navigate('/interface', { state: { id: id } });
+    };
+
     return (
         <div className="visits-container">
             <h1 className="visits-header">Visits</h1>
@@ -36,6 +41,9 @@ const Visits = () => {
                     </div>
                 ))
             )}
+            <button className="return-button" onClick={handleReturnClick}>
+                Return
+            </button>
         </div>
     );
 };

@@ -50,3 +50,15 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.return-button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

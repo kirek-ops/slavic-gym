@@ -1,6 +1,8 @@
 package MMM.demo.Resources;
 
 import MMM.demo.Entities.Membership;
+import MMM.demo.Entities.TransactionsMembership;
+import MMM.demo.Utils.UuidGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,17 @@ public class MembershipsResource {
 
     @PostMapping("/buy")
     public ResponseEntity<Map<String, Object>> buyMembership(@RequestBody Map<String, Object> body) {
-        Integer memberId = (Integer) body.get("memberId");
-        Integer membershipId = (Integer) body.get("membershipId");
-        log.info("Received request to buy membership for member {} with membership {}", memberId, membershipId);
-        boolean success = membershipDaoImpl.buyMembership(memberId, membershipId);
+        TransactionsMembership transaction = new TransactionsMembership();
+        transaction.setId_membership((Integer) body.get("membershipId"));
+        transaction.setId_member((Integer) body.get("memberId"));
+
+        try {
+            transaction.setId_transaction(new UuidGenerator("id_transaction").generateUniqueID());
+        } catch (Exception e) {
+            log.info("No transaction id provided. Generating new one.");
+        }
+
+        boolean success = membershipDaoImpl.buyMembership(transaction);
         return ResponseEntity.ok(Map.of("success", success));
     }
 

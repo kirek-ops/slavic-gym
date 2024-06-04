@@ -17,6 +17,11 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class UuidGenerator {
     private static final Logger log = LoggerFactory.getLogger(UuidGenerator.class);
+    private static String seq;
+
+    public UuidGenerator (String seq) {
+        this.seq = seq;
+    }
 
     public static Integer generateUniqueID() throws Exception {
         Integer id = -1;
@@ -30,7 +35,7 @@ public class UuidGenerator {
         String url = "jdbc:postgresql://localhost:5432/slavic_gym";
         Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT nextval('id_sequence')");
+        ResultSet rs = stmt.executeQuery("SELECT nextval('" + seq + "')");;
         
         if (rs.next()) {
             id = rs.getInt(1);

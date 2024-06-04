@@ -1,6 +1,7 @@
 package MMM.demo.Daos;
 
 import MMM.demo.Entities.Membership;
+import MMM.demo.Entities.TransactionsMembership;
 import MMM.demo.Repositories.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,9 +31,10 @@ public class MembershipDaoImpl implements MembershipRepository {
         return jdbcTemplate.query(sql, new MembershipRowMapper(), id);
     }
 
-    public boolean buyMembership(Integer memberId, Integer membershipId) {
-        String sql = "INSERT INTO client_membership (id_member, id_membership, start_date) VALUES (?, ?, CURRENT_DATE)";
-        int rowsAffected = jdbcTemplate.update(sql, memberId, membershipId);
+    public boolean buyMembership(TransactionsMembership transaction) {
+        String sql = "INSERT INTO transactions_memberships (id_transaction, id_membership, id_member, order_time) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+
+        int rowsAffected = jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_membership(), transaction.getId_member());
         return rowsAffected > 0;
     }
 

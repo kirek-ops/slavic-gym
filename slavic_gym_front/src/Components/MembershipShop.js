@@ -8,30 +8,31 @@ const MembershipShop = () => {
     const { id, email } = location.state;
     const [memberships, setMemberships] = useState([]);
     const [userMemberships, setUserMemberships] = useState([]);
+    const [hasBeenTransaction, setHasBeenTransaction] = useState(0);
+
+    const fetchData = async () => {
+        try {
+            // Fetch all memberships
+            const allMembershipsResponse = await axios.post('http://localhost:8080/memberships/getall');
+            if (Array.isArray(allMembershipsResponse.data)) {
+                setMemberships(allMembershipsResponse.data);
+            } else {
+                console.error('API response is not an array:', allMembershipsResponse.data);
+            }
+
+            // Fetch user's active memberships
+            const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id: id });
+            if (Array.isArray(userMembershipsResponse.data)) {
+                setUserMemberships(userMembershipsResponse.data);
+            } else {
+                console.error('API response is not an array:', userMembershipsResponse.data);
+            }
+        } catch (error) {
+            console.error('Error fetching memberships:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch all memberships
-                const allMembershipsResponse = await axios.post('http://localhost:8080/memberships/getall');
-                if (Array.isArray(allMembershipsResponse.data)) {
-                    setMemberships(allMembershipsResponse.data);
-                } else {
-                    console.error('API response is not an array:', allMembershipsResponse.data);
-                }
-
-                // Fetch user's active memberships
-                const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id: id });
-                if (Array.isArray(userMembershipsResponse.data)) {
-                    setUserMemberships(userMembershipsResponse.data);
-                } else {
-                    console.error('API response is not an array:', userMembershipsResponse.data);
-                }
-            } catch (error) {
-                console.error('Error fetching memberships:', error);
-            }
-        };
-
         fetchData();
     }, [id]);
 
@@ -43,6 +44,10 @@ const MembershipShop = () => {
             });
             if (response.data.success) {
                 alert('Membership purchased successfully!');
+
+                setHasBeenTransaction(hasBeenTransaction + 1);
+                fetchData();
+
                 // Refresh user's memberships after purchase
                 const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id });
                 if (Array.isArray(userMembershipsResponse.data)) {
@@ -89,6 +94,7 @@ const MembershipShop = () => {
                     </li>
                 ))}
             </ul>
+
         </div>
     );
 };

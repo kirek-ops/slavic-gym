@@ -47,7 +47,7 @@ CREATE TABLE classes (
     class_name VARCHAR(100) NOT NULL,
     schedule DATE NOT NULL,
     time_from TIME NOT NULL,
-    time_till INTERVAL NOT NULL,
+    time_till TIME NOT NULL,
     id_gym INT,
     capacity INT NOT NULL,
     id_instructor INT,

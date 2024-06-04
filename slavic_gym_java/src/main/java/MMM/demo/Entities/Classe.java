@@ -1,7 +1,7 @@
 
 package MMM.demo.Entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class Classe {
 
     private String class_name;
 
-    private LocalDateTime schedule;
+    private LocalDate schedule;
 
     private LocalTime time_from;
 

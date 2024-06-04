@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
-import '../Css/MembershipShop.css'; // Import CSS file
+import '../Css/ClassSubmition.css'; // Import CSS file
 
 const ClassSubmition = () => {
   const location = useLocation();
   const { id, hasPosition, gyms } = location.state;
 
   const [formData, setFormData] = useState({
-    day: '',
+    class_name: '',
+    schedule: '',
     time_from: '',
     time_till: '',
-    name: '',
+    id_gym: 0,
+    capacity: 0,
+    id_instructor: 0
   });
+
+  useEffect(() => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      id_instructor: parseInt(id)
+    }))
+  }, [id]);
 
   console.log(id, hasPosition, gyms);
 
@@ -20,19 +30,37 @@ const ClassSubmition = () => {
 
   const handleGymChange = (event) => {
     setSelectedGym(event.target.value);
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      id_gym: parseInt(event.target.value)
+    }))
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    const newValue = name === 'capacity' ? parseInt(value) : value;
     setFormData(prevFormData => ({
       ...prevFormData,
-      [name]: value
+      [name]: newValue
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    console.log('Trying to submit form: ', formData);
+
+    const isFormValid = Object.values(formData).every(value => value !== '');
+    if (!isFormValid) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    const response = await axios.put(`http://localhost:8080/classes/${id}/submit-class`, formData);
+    console.log(response);
     console.log('Form submitted:', formData);
+
+    alert(response.data);
   };
 
   const allowedGyms = gyms.filter(gym => {
@@ -44,10 +72,10 @@ const ClassSubmition = () => {
   console.log(allowedGyms);
 
   return (
-    <div>
-      <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="gym-select" style={{ marginRight: '10px', fontSize: '18px' }}>Choose a gym:</label>
-        <select id="gym-select" value={selectedGym} onChange={handleGymChange} style={{ padding: '10px', fontSize: '16px' }}>
+    <div className="interface-container">
+      <div className="select-container">
+        <label htmlFor="gym-select" className="label">Choose a gym:</label>
+        <select id="gym-select" value={selectedGym} onChange={handleGymChange} className="select">
           <option value="">Select a gym</option>
           {Array.isArray(allowedGyms) && allowedGyms.map((gym, index) => (
             <option key={index} value={gym.id_gym}>
@@ -59,65 +87,64 @@ const ClassSubmition = () => {
 
       {selectedGym && (
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="day" style={{ marginRight: '10px', fontSize: '16px' }}>Day:</label>
+          <div className="form-group">
+            <label htmlFor="day" className="label">Day:</label>
             <input
               type="text"
               id="day"
-              name="day"
-              value={formData.day}
+              name="schedule"
+              value={formData.schedule}
               onChange={handleInputChange}
-              style={{ padding: '10px', fontSize: '16px' }}
+              className="input"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="time_from" style={{ marginRight: '10px', fontSize: '16px' }}>Time From:</label>
+          <div className="form-group">
+            <label htmlFor="time_from" className="label">Time From:</label>
             <input
               type="time"
               id="time_from"
               name="time_from"
               value={formData.time_from}
               onChange={handleInputChange}
-              style={{ padding: '10px', fontSize: '16px' }}
+              className="input"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="time_till" style={{ marginRight: '10px', fontSize: '16px' }}>Time Till:</label>
+          <div className="form-group">
+            <label htmlFor="time_till" className="label">Time Till:</label>
             <input
               type="time"
               id="time_till"
               name="time_till"
               value={formData.time_till}
               onChange={handleInputChange}
-              style={{ padding: '10px', fontSize: '16px' }}
+              className="input"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="name" style={{ marginRight: '10px', fontSize: '16px' }}>Name:</label>
+          <div className="form-group">
+            <label htmlFor="name" className="label">Name:</label>
             <input
               type="text"
               id="name"
-              name="name"
-              value={formData.name}
+              name="class_name"
+              value={formData.class_name}
               onChange={handleInputChange}
-              style={{ padding: '10px', fontSize: '16px' }}
+              className="input"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="capacity" style={{ marginRight: '10px', fontSize: '16px' }}>Capacity:</label>
+          <div className="form-group">
+            <label htmlFor="capacity" className="label">Capacity:</label>
             <input
               type="number"
               id="capacity"
               name="capacity"
               value={formData.capacity}
               onChange={handleInputChange}
-              style={{ padding: '10px', fontSize: '16px' }}
+              className="input"
             />
           </div>
-          <button type="submit" style={{ padding: '10px', fontSize: '16px' }}>Submit</button>
+          <button type="submit" className="button">Submit</button>
         </form>
       )}
-      {/* <pre>{JSON.stringify(hasPosition, null, 2)}</pre> For debugging purposes */}
     </div>
   );
 };

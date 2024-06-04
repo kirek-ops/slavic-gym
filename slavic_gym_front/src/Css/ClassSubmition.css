@@ -1,45 +1,29 @@
-/* Interface.css */
-
+/* ClassSubmition.css */
 .interface-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  text-align: center; /* Ensure text is centered */
+  padding: 20px;
 }
 
-.interface-header {
-  margin-bottom: 30px;
-  color: #007BFF;
-}
-
-.select-container {
+.select-container, .form-group {
   margin-bottom: 20px;
-  text-align: center; /* Ensure text is centered */
+  width: 100%;
+  max-width: 500px;
 }
 
 .label {
-  margin-right: 10px;
-  font-size: 18px;
-}
-
-.select {
-  padding: 10px;
+  display: block;
+  margin-bottom: 5px;
   font-size: 16px;
 }
 
-.form-group {
-  margin-bottom: 10px;
-  text-align: center; /* Ensure text is centered */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center input fields */
-}
-
-.input {
+.select, .input {
+  width: 100%;
   padding: 10px;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 .button {
@@ -51,4 +35,43 @@
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-item {
+  margin-bottom: 5px;
+  font-size: 16px;
 }

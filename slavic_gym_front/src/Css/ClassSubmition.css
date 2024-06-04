@@ -1,10 +1,12 @@
+/* Interface.css */
+
 .interface-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  text-align: right; /* Align text to the right */
+  text-align: center; /* Ensure text is centered */
 }
 
 .interface-header {
@@ -14,7 +16,7 @@
 
 .select-container {
   margin-bottom: 20px;
-  text-align: right; /* Align text to the right */
+  text-align: center; /* Ensure text is centered */
 }
 
 .label {
@@ -25,21 +27,19 @@
 .select {
   padding: 10px;
   font-size: 16px;
-  text-align: right; /* Align text to the right */
 }
 
 .form-group {
   margin-bottom: 10px;
-  text-align: right; /* Align text to the right */
+  text-align: center; /* Ensure text is centered */
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Align input fields to the right */
+  align-items: center; /* Center input fields */
 }
 
 .input {
   padding: 10px;
   font-size: 16px;
-  text-align: right; /* Align text to the right */
 }
 
 .button {

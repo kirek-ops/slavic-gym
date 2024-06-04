@@ -54,7 +54,7 @@ public class AuthResource {
         user.setPasswd((String) body.get("password"));
 
         try {
-            user.setId_member(UuidGenerator.generateUniqueID());
+            user.setId_member(new UuidGenerator("id_sequence").generateUniqueID());
         } catch (Exception e) {
             log.info("Error while assigning id. Aborting.");
             return ResponseEntity.notFound().build();

@@ -65,7 +65,7 @@ CREATE TRIGGER enforce_instructor_position_validity
 EXECUTE FUNCTION check_instructor_position_validity();
 
 
--- Create a function to check if the instructor has intersecting classes at any moment of time
+-- Create or replace the function to check instructor class availability
 CREATE OR REPLACE FUNCTION check_instructor_class_availability() RETURNS TRIGGER AS $$
 BEGIN
     IF EXISTS (
@@ -75,8 +75,8 @@ BEGIN
           AND c.id_class <> NEW.id_class
           AND c.schedule = NEW.schedule
           AND (
-            (NEW.time_from >= c.time_from AND NEW.time_from < c.time_from + c.duration) OR
-            (c.time_from >= NEW.time_from AND c.time_from < NEW.time_from + NEW.duration)
+            (NEW.time_from < c.time_till AND NEW.time_till > c.time_from) OR
+            (c.time_from < NEW.time_till AND c.time_till > NEW.time_from)
             )
     ) THEN
         RAISE EXCEPTION 'The instructor has intersecting classes at the same time.';
@@ -85,9 +85,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create a trigger to enforce the check constraint before inserting into the classes table
+-- Drop the existing trigger if it exists
+DROP TRIGGER IF EXISTS enforce_instructor_class_availability ON classes;
+
+-- Create the trigger to enforce the check constraint before inserting into the classes table
 -- Raises exception in case the instructor has intersecting classes at the same time
 CREATE TRIGGER enforce_instructor_class_availability
-    BEFORE INSERT ON classes
+    BEFORE INSERT OR UPDATE ON classes
     FOR EACH ROW
 EXECUTE FUNCTION check_instructor_class_availability();

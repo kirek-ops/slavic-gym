@@ -1,0 +1,39 @@
+/* Interface.css */
+
+.interface-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.interface-header {
+    margin-bottom: 30px;
+    color: #007BFF;
+}
+
+.select-container {
+    margin-bottom: 20px;
+}
+
+.label {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.select {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}

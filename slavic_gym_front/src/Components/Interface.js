@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
+import '../Css/Interface.css';
 
 const Interface = () => {
     const location = useLocation();
@@ -105,19 +106,12 @@ const Interface = () => {
     }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh'
-        }}>
-            <h1 style={{marginBottom: '30px', color: '#007BFF'}}>Welcome to the Gym App</h1>
+        <div className="interface-container">
+            <h1 className="interface-header">Welcome to the Gym App</h1>
 
-            <div style={{marginBottom: '20px'}}>
-                <label htmlFor="gym-select" style={{marginRight: '10px', fontSize: '18px'}}>Choose a gym:</label>
-                <select id="gym-select" value={selectedGym} onChange={handleGymChange}
-                        style={{padding: '10px', fontSize: '16px'}}>
+            <div className="select-container">
+                <label htmlFor="gym-select" className="label">Choose a gym:</label>
+                <select id="gym-select" className="select" value={selectedGym} onChange={handleGymChange}>
                     <option value="">Select a gym</option>
                     {Array.isArray(gyms) && gyms.map((gym, index) => (
                         <option key={index} value={gym.id_gym}>{gym.name} - {gym.distance ? `${gym.distance.toFixed(2)} km` : 'Unknown'}</option>
@@ -125,42 +119,9 @@ const Interface = () => {
                 </select>
             </div>
 
-            <button style={{
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleQRButtonClick}>
-                Get My QR Code
-            </button>
-            <button style={{
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                marginTop: '20px'
-            }} onClick={handleVisitsButton}>
-                See my visits
-            </button>
-
-            <button style={{
-                marginTop: '20px',
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-            }} onClick={handleMembershipShopClick}>
-                My memberships
-            </button>
+            <button className="button" onClick={handleQRButtonClick}>Get My QR Code</button>
+            <button className="button" onClick={handleVisitsButton}>See my visits</button>
+            <button className="button" onClick={handleMembershipShopClick}>My memberships</button>
         </div>
     );
 }

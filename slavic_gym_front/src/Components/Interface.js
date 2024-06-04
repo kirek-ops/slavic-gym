@@ -16,6 +16,25 @@ const Interface = () => {
     const [positions, setPositions] = useState(null);
     const [hasPosition, setHasPosition] = useState({});
 
+    const fetchGymLocations = async () => {
+        try {
+            const updatedGyms = await Promise.all(gyms.map(async gym => {
+                const gym_location = await axios.get(`http://localhost:8080/gyms/${gym.id_gym}/get-location`);
+                const { lat: gym_lat, lng: gym_lng } = gym_location.data;
+                const distance = calculateDistance(userLocation.latitude, userLocation.longitude, gym_lat, gym_lng);
+                return {
+                    ...gym,
+                    distance: distance
+                };
+            }));
+
+            const sortedGyms = updatedGyms.sort((a, b) => a.distance - b.distance);
+            setGyms(sortedGyms);
+        } catch (error) {
+            console.error('Error fetching gym locations:', error);
+        }
+    };
+
     useEffect(() => {
         // Get user geolocation
         navigator.geolocation.getCurrentPosition(
@@ -75,24 +94,7 @@ const Interface = () => {
     }, [positions]);
 
     useEffect(() => {
-        const fetchGymLocations = async () => {
-            try {
-                const updatedGyms = await Promise.all(gyms.map(async gym => {
-                    const gym_location = await axios.get(`http://localhost:8080/gyms/${gym.id_gym}/get-location`);
-                    const { lat: gym_lat, lng: gym_lng } = gym_location.data;
-                    const distance = calculateDistance(userLocation.latitude, userLocation.longitude, gym_lat, gym_lng);
-                    return {
-                        ...gym,
-                        distance: distance
-                    };
-                }));
-
-                const sortedGyms = updatedGyms.sort((a, b) => a.distance - b.distance);
-                setGyms(sortedGyms);
-            } catch (error) {
-                console.error('Error fetching gym locations:', error);
-            }
-        };
+        fetchGymLocations();
 
         const interval = setInterval(fetchGymLocations, 10000); // Fetch every 10 seconds
 

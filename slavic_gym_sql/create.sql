@@ -60,9 +60,9 @@ CREATE TABLE member_employees (
 CREATE TABLE classes (
     id_class INT PRIMARY KEY,
     class_name VARCHAR(100) NOT NULL,
-    schedule TIMESTAMP NOT NULL,
+    schedule DATE NOT NULL,
     time_from TIME NOT NULL,
-    time_till TIME NOT NULL,
+    duration INTERVAL NOT NULL,
     id_gym INT,
     capacity INT NOT NULL,
     id_instructor INT,

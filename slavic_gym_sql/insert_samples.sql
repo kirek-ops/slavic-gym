@@ -59,7 +59,7 @@ INSERT INTO inventory (id_item, item_name, quantity, id_gym, price) VALUES
                                                                               (1, 'Whey Protein', 50, 1, 67.59),
                                                                               (2, 'Multivitamin', 100, 1, 50.49),
                                                                               (3, 'Dumbbells Set', 30, 1, 150.49),
-                                                                              (4, 'Treadmill', 10, 1, 1299.99),
+                                                                              (4, 'Treadmill', 1, 1, 1299.99),
                                                                               (5, 'Water', 10, 5, 99.99),
                                                                               (6, 'R-Weller Shot', 0, 1, 9.99);
 

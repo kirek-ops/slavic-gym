@@ -3,13 +3,14 @@ package MMM.demo.Daos;
 
 import MMM.demo.Entities.TransactionsInventory;
 import MMM.demo.Repositories.TransactionsInventoryRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 import java.time.OffsetDateTime;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 @Repository
+@Slf4j
 public class TransactionsInventoryDaoImpl implements TransactionsInventoryRepository {
 
     @Autowired
@@ -27,6 +29,13 @@ public class TransactionsInventoryDaoImpl implements TransactionsInventoryReposi
     public List<TransactionsInventory> findAll() {
         String sql = "SELECT * FROM transactions_inventory";
         return jdbcTemplate.query(sql, new TransactionsInventoryRowMapper());
+    }
+
+    public void insertTransaction(TransactionsInventory transaction) {
+        log.info("Inserting transaction: " + transaction.toString());
+        String sql = "INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_item(), transaction.getId_member(),
+                Timestamp.valueOf(transaction.getOrder_time().toLocalDateTime()), transaction.getQuantity());
     }
 
 

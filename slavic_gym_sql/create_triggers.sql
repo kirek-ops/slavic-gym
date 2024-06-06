@@ -94,3 +94,51 @@ CREATE TRIGGER enforce_instructor_class_availability
     BEFORE INSERT OR UPDATE ON classes
     FOR EACH ROW
 EXECUTE FUNCTION check_instructor_class_availability();
+
+
+-- Create or replace the trigger function to check if there's enough inventory before insertion
+CREATE OR REPLACE FUNCTION check_inventory_before_insert()
+    RETURNS TRIGGER AS $$
+BEGIN
+    -- Check if there's enough inventory available
+    IF EXISTS (
+        SELECT 1
+        FROM inventory
+        WHERE id_item = NEW.id_item
+          AND quantity >= NEW.quantity
+    ) THEN
+        -- If there's enough inventory, allow the insertion
+        RETURN NEW;
+    ELSE
+        -- If there's not enough inventory, raise an exception to prevent insertion
+        RAISE EXCEPTION 'Insufficient inventory available for item %', NEW.id_item;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to execute the check_inventory_before_insert function before insertion into transactions_inventory
+CREATE TRIGGER check_inventory_trigger
+    BEFORE INSERT ON transactions_inventory
+    FOR EACH ROW
+EXECUTE FUNCTION check_inventory_before_insert();
+
+
+--Create a trigger to subtract the quantity of the item from the inventory when a new transaction is made
+CREATE OR REPLACE FUNCTION update_inventory()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        -- Subtract the purchased quantity from the inventory
+        UPDATE inventory
+        SET quantity = quantity - NEW.quantity
+        WHERE id_item = NEW.id_item;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to execute the update_inventory function after insertion into transactions_inventory
+CREATE TRIGGER update_inventory_trigger
+    AFTER INSERT ON transactions_inventory
+    FOR EACH ROW
+EXECUTE FUNCTION update_inventory();

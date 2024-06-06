@@ -34,7 +34,7 @@ public class GymsResource {
             return ResponseEntity.notFound().build();
         }
         try {
-            log.info("City {} Street {}", foundGym.getCity(), foundGym.getStreet());
+//            log.info("City {} Street {}", foundGym.getCity(), foundGym.getStreet());
             Double ar[] = LocationFetcher.getLatLng(foundGym.getCity(), foundGym.getStreet());
             return ResponseEntity.ok(Map.of("lat", ar[0], "lng", ar[1]));
         } catch (Exception e) {

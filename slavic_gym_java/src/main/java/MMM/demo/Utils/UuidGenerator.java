@@ -49,7 +49,6 @@ public class UuidGenerator {
     }
 
     private static Properties loadProperties() throws IOException {
-        log.info("Loading properties");
         Properties properties = new Properties();
         Resource resource = new ClassPathResource("config.properties");
 
@@ -59,9 +58,6 @@ public class UuidGenerator {
             log.warn("Error loading config.properties file", e);
             throw e;
         }
-
-        log.info("Properties loaded");
-        log.info("properties: " + properties.toString());
         return properties;
     }
 }

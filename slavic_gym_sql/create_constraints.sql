@@ -6,3 +6,10 @@ ALTER TABLE classes
     ADD CONSTRAINT check_time_till_later_than_time_from
         CHECK (time_till > time_from);
 
+ALTER TABLE employee_positions
+    ADD CONSTRAINT check_start_date_before_end_date
+        CHECK ((end_date IS NULL) OR (start_date < end_date));
+
+ALTER TABLE memberships
+    ADD CONSTRAINT check_membership_duration
+        CHECK (duration > 0);

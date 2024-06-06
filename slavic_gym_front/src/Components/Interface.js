@@ -167,6 +167,14 @@ const Interface = () => {
         navigate('/submit-classes', { state: { id: id, hasPosition: hasPosition, gyms: gyms } });
     }
 
+    const handleShopButton = () => {
+        if (selectedGym) {
+            navigate('/shop', {state: {id: id, gym: selectedGym}});
+        } else {
+            alert("Please select a gym before proceeding.");
+        }
+    }
+
     return (
         <div className="interface-container">
             <h1 className="interface-header">Welcome to the Gym App</h1>
@@ -184,6 +192,7 @@ const Interface = () => {
             <button className="button" onClick={handleQRButtonClick}>Get My QR Code</button>
             <button className="button" onClick={handleVisitsButton}>See my visits</button>
             <button className="button" onClick={handleMembershipShopClick}>My memberships</button>
+            <button className="button" onClick={handleShopButton}>Shop</button>
             { hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleSubmitClass}>Submit class</button>) : null}
         </div>
     );

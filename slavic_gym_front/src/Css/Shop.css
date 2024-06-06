@@ -1,0 +1,133 @@
+.shop-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+.shop-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.cart-button-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.cart-button {
+    background-color: transparent;
+    border: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-icon {
+    width: 40px;
+    height: auto;
+}
+
+.cart-button span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 14px;
+}
+
+.inventory-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.inventory-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    width: calc(100% - 40px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 14px;
+}
+
+.inventory-item h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.inventory-item p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.inventory-item-image {
+    width: auto;
+    height: auto;
+    max-width: 150px; /* Limit maximum width to 150px */
+    max-height: 150px; /* Limit maximum height to 150px */
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.item-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.item-counter button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.item-counter button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.item-counter span {
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.buy-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.buy-button:hover {
+    background-color: #218838;
+}
+
+@media (min-width: 768px) {
+    .inventory-item {
+        width: calc(50% - 40px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .inventory-item {
+        width: calc(33.333% - 40px);
+    }
+}

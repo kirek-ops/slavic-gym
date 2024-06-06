@@ -9,6 +9,8 @@ import Home from './Components/Home';
 import Visits from './Components/Visits';
 import Membership from './Components/MembershipShop';
 import ClassSubmition from './Components/ClassSubmition';
+import Shop from "./Components/Shop";
+import Cart from "./Components/Cart";
 
 function App() {
     return (
@@ -22,9 +24,10 @@ function App() {
                 <Route path="/visits" element={<Visits/>} />
                 <Route path="/goals" element={<h1>Goals</h1>} />
                 <Route path="/availibleclasses" element={<h1>availibleclasses</h1>} />
-                <Route path="/profile" element={<h1>Profile</h1>} />
                 <Route path="/membershipshop" element={<Membership />} />
                 <Route path="/submit-classes" element={<ClassSubmition />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/cart" element={<Cart />} />
             </Routes>
         </Router>
     );

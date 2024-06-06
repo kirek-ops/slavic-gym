@@ -1,0 +1,42 @@
+.cart-container {
+    padding: 20px;
+}
+
+.cart-list {
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cart-item-image {
+    width: 100px; /* Set the desired width */
+    height: 100px; /* Set the desired height */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+}
+
+.item-counter {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.item-counter button {
+    width: 30px;
+    height: 30px;
+}
+
+.total-price {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+}

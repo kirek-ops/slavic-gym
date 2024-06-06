@@ -17,6 +17,6 @@ public class Inventory {
 
     private Integer id_gym;
 
-    private Integer id_category;
+    private Float price;
 
 }

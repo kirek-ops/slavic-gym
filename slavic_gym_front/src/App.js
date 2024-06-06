@@ -12,6 +12,7 @@ import ClassSubmition from './Components/ClassSubmition';
 import ClassBooking from './Components/ClassBooking';
 import Shop from "./Components/Shop";
 import Cart from "./Components/Cart";
+import ProgressLogger from "./Components/ProgressLogger";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/book-class" element={<ClassBooking />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/progress-log" element={<ProgressLogger/>}/>
             </Routes>
         </Router>
     );

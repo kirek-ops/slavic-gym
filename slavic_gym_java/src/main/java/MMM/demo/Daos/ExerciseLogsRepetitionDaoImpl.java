@@ -10,9 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,14 +29,34 @@ public class ExerciseLogsRepetitionDaoImpl implements ExerciseLogsRepetitionRepo
         return jdbcTemplate.query(sql, new ExerciseLogsRepetitionRowMapper());
     }
 
+    public int insertLog(ExerciseLogsRepetition curLog) {
+        String sql = "INSERT INTO exercise_logs_repetitions (id_log, id_member, id_exercise, log_date, reps_done) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+        Object[] params = {
+            curLog.getId_log(),
+            curLog.getId_member(),
+            curLog.getId_exercise(),
+            curLog.getLog_date(),
+            curLog.getReps_done()
+        };
+        int[] types = {
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.DATE,
+            Types.INTEGER
+        };
+        return jdbcTemplate.update(sql, params, types);
+    }
+
     private static class ExerciseLogsRepetitionRowMapper implements RowMapper<ExerciseLogsRepetition> {
         @Override
         public ExerciseLogsRepetition mapRow(ResultSet rs, int rowNum) throws SQLException {
             ExerciseLogsRepetition result = new ExerciseLogsRepetition();
             result.setId_log(rs.getInt("id_log"));
             result.setId_member(rs.getInt("id_member"));
-            result.setId_goal(rs.getInt("id_goal"));
-            result.setLog_date(rs.getObject("log_date", OffsetDateTime.class));
+            result.setId_exercise(rs.getInt("id_exercise"));
+            result.setLog_date(rs.getDate("log_date").toLocalDate());
             result.setReps_done(rs.getInt("reps_done"));
             return result;
         }

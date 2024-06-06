@@ -90,3 +90,19 @@ VALUES
     ((SELECT nextval('id_classes')), 'Meditation', '2024-06-16', '07:00:00', '08:00:00', 1, 15, 1), -- John Doe (Trainer)
     ((SELECT nextval('id_classes')), 'CrossFit', '2024-06-17', '09:00:00', '10:30:00', 2, 20, 2), -- Jane Smith (Manager)
     ((SELECT nextval('id_classes')), 'Boxing', '2024-06-18', '11:00:00', '12:30:00', 1, 10, 1); -- John Doe (Trainer)
+
+INSERT INTO repetition_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Push Ups'),
+    (2, 'Squats'),
+    (3, 'Pull Ups'),
+    (4, 'Lunges'),
+    (5, 'Bicep Curls');
+
+INSERT INTO time_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Plank'),
+    (2, 'Wall Sit'),
+    (3, 'Running'),
+    (4, 'Cycling'),
+    (5, 'Jump Rope');

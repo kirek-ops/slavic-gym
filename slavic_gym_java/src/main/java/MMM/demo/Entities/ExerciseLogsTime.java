@@ -2,7 +2,7 @@
 package MMM.demo.Entities;
 
 import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +14,10 @@ public class ExerciseLogsTime {
 
     private Integer id_member;
 
-    private Integer id_goal;
+    private Integer id_exercise;
 
-    private OffsetDateTime log_date;
+    private LocalDate log_date;
 
-    private Duration time_done;
+    private Integer minutes_done;
 
 }

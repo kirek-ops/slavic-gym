@@ -36,7 +36,7 @@ public class ClassesResource {
     }
 
     @GetMapping("/{id}/{id_gym}/get-classes-gym-from-today")
-    public ResponseEntity < List < Classe> > getAllClassesFromToday(@PathVariable Integer id, @PathVariable Integer id_gym) {
+    public ResponseEntity < List < Classe> > getAllClassesFromTodayInGym(@PathVariable Integer id, @PathVariable Integer id_gym) {
       List <Classe> result = classeDaoImpl.getAllFromTodayInGym(id, id_gym);
       return ResponseEntity.ok(result);
     }

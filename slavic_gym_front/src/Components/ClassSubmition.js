@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import '../Css/ClassSubmition.css'; // Import CSS file
+import '../Css/ClassesList.css';
 
 const ClassSubmition = () => {
   const location = useLocation();
@@ -71,9 +72,28 @@ const ClassSubmition = () => {
 
   console.log(allowedGyms);
 
+  const [classes, setClasses] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios.get(`http://localhost:8080/classes/${id}/get-classes-from-today`)
+        .then(response => {
+          setClasses(response.data);
+        })
+        .catch(error => {
+          console.error('There was an error fetching the classes!', error);
+        });
+    }
+    fetchData();
+    console.log("Classes is: ", classes);
+
+    const intervalId = setInterval(fetchData, 60000);
+    return () => clearInterval(intervalId);
+  }, [id]);
+
   return (
     <div className="interface-container">
-      <div className="select-container">
+    <div className="select-container">
         <label htmlFor="gym-select" className="label">Choose a gym:</label>
         <select id="gym-select" value={selectedGym} onChange={handleGymChange} className="select">
           <option value="">Select a gym</option>
@@ -83,9 +103,10 @@ const ClassSubmition = () => {
             </option>
           ))}
         </select>
-      </div>
+    </div>
 
-      {selectedGym && (
+    {selectedGym && (
+      <div className="form-container">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="day" className="label">Day:</label>
@@ -144,8 +165,26 @@ const ClassSubmition = () => {
           </div>
           <button type="submit" className="button">Submit</button>
         </form>
-      )}
+      </div>
+    )}
+
+    <div className="container">
+      <div className="header">Classes</div>
+      {classes.map(classe => (
+        <div key={classe.id_class} className="card">
+          <div className="card-title">{classe.class_name}</div>
+          <div className="card-content">
+            <div className="card-item"><strong>Schedule:</strong> {classe.schedule}</div>
+            <div className="card-item"><strong>Time From:</strong> {classe.time_from}</div>
+            <div className="card-item"><strong>Time Till:</strong> {classe.time_till}</div>
+            <div className="card-item"><strong>Gym ID:</strong> {classe.id_gym}</div>
+            <div className="card-item"><strong>Capacity:</strong> {classe.capacity}</div>
+            <div className="card-item"><strong>Instructor ID:</strong> {classe.id_instructor}</div>
+          </div>
+          </div>
+      ))}
     </div>
+  </div>
   );
 };
 

@@ -45,29 +45,19 @@ public class ShopResource {
             // Begin the transaction
             for (Map<String, Object> item : items) {
                 Integer itemId = Integer.parseInt(item.get("id_item").toString());
-                log.info(itemId.toString());
                 Integer quantity = Integer.parseInt((item.get("quantity")).toString());
-                log.info(quantity.toString());
-                log.info("Item: " + itemId + " Quantity: " + quantity);
 
-                // Attempt to insert a new transaction for each item
-                log.info("Inserting transaction for item: " + itemId + " with quantity: " + quantity);
                 TransactionsInventory transaction = new TransactionsInventory();
                 transaction.setId_transaction(new UuidGenerator("id_transaction").generateUniqueID());
                 transaction.setId_item(itemId);
                 transaction.setId_member(id);
                 transaction.setOrder_time(OffsetDateTime.now());
                 transaction.setQuantity(quantity);
-                log.info("Transaction created: " + transaction.toString() + " " + transaction.getId_transaction());
                 transactionsInventoryDao.insertTransaction(transaction);
-                log.info("Transaction inserted: " + transaction.toString());
-//                log.info(item.get("quantity").toString());
             }
-//            // Commit the transaction
             return ResponseEntity.ok("Items successfully bought!");
         } catch (Exception e) {
             log.error("Error buying items: " + e.getMessage());
-            // Rollback the transaction in case of an error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error buying items: " + e.getMessage());
         }
     }

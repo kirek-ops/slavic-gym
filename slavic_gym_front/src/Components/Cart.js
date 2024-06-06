@@ -10,13 +10,16 @@ const Cart = () => {
     const gym = location.state.gym;
     const cartItems = location.state.cartItems || [];
     const maxQuantities = location.state.maxQuantities || [];
+    const itemNames = location.state.itemNames || {};
     const [quantities, setQuantities] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
 
-    console.log(cartItems);
-    console.log(maxQuantities);
+
+    console.log('Cart Items', cartItems);
+    console.log('Max Quantities', maxQuantities);
 
     useEffect(() => {
+        console.log('LOLOLOLOLOLOLOLOLOLOL');
         // Initialize quantities and calculate initial total price
         let initialQuantities = {};
         let initialTotalPrice = 0;
@@ -28,6 +31,7 @@ const Cart = () => {
 
         setQuantities(initialQuantities);
         setTotalPrice(initialTotalPrice);
+        localStorage.setItem('cartQuantities', JSON.stringify(initialQuantities));
     }, [cartItems]);
 
     const incrementQuantity = (itemId, itemPrice) => {
@@ -41,13 +45,14 @@ const Cart = () => {
                     [itemId]: currentQuantity + 1
                 };
                 setTotalPrice(totalPrice + (itemPrice || 0));
+                console.log('Incrementing', newQuantities);
+                localStorage.setItem('cartQuantities', JSON.stringify(newQuantities)); // Save quantities to local storage
                 return newQuantities;
             } else {
                 return prevQuantities;
             }
         });
     };
-
 
     const decrementQuantity = (itemId, itemPrice) => {
         setQuantities(prevQuantities => {
@@ -58,12 +63,15 @@ const Cart = () => {
             if (prevQuantities[itemId] > 0) {
                 setTotalPrice(totalPrice - (itemPrice || 0));
             }
+            console.log('Decrementing', newQuantities);
+            localStorage.setItem('cartQuantities', JSON.stringify(newQuantities)); // Save quantities to local storage
             return newQuantities;
         });
     };
 
     const handleBackToShop = () => {
-        navigate('/shop', { state: { id: id, gym: gym, cartItems } } );
+        const storedQuantities = localStorage.getItem('cartQuantities');
+        navigate('/shop', { state: { id: id, gym: gym, returnedCartItems: storedQuantities } } );
     };
 
     const handleBuy = async () => {
@@ -77,8 +85,20 @@ const Cart = () => {
         });
 
         console.log(response);
-        alert('Thank you for your purchase!');
-        navigate('/shop', { state: { id: id, gym: gym, cartItems: [] } });
+
+        if (response.data.success) {
+            alert('Thank you for your purchase!');
+            localStorage.clear();
+            navigate('/shop', { state: { id: id, gym: gym, cartItems: [] } });
+        }
+        else {
+            const name = itemNames[response.data.erroredItem];
+
+            const responseForErroredItem = await axios.post('http://localhost:8080/shop/getbyiditem', { "itemId": response.data.erroredItem, "gymId": parseInt(gym) });
+            console.log(responseForErroredItem);
+
+            alert(`Something went wrong with your purchase. We have only ${responseForErroredItem.data.quantity} ${name} left in stock. Please try again.`);
+        }
     };
 
     return (

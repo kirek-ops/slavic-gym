@@ -49,7 +49,7 @@ BEGIN
           AND ep.id_gym = NEW.id_gym
           AND ep.start_date <= NEW.schedule
           AND (ep.end_date IS NULL OR ep.end_date >= NEW.schedule)
-          AND p.position_name IN ('Instructor', 'Manager')
+          AND p.position_name IN ('Trainer', 'Manager')
     ) THEN
         RAISE EXCEPTION 'The instructor is not employed as an instructor or manager at the specified gym.';
     END IF;

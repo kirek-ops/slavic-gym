@@ -100,14 +100,15 @@ public class ClasseDaoImpl implements ClasseRepository {
         LocalDate date_from,
         LocalDate date_to
     ) {
-        String sql = "SELECT c.id_class, c.class_name, c.schedule, c.time_from, c.time_till, g.name, gm.first_name, gm.last_name, c.capacity " +
+        String sql = "SELECT c.id_class, c.class_name, c.schedule, c.time_from, c.time_till, g.name, gm.first_name, gm.last_name, c.capacity, " +
+                "get_number_of_bookings_for_class(c.id_class) AS enrolled " +
                 "FROM classes c " +
                 "JOIN gyms g ON g.id_gym = c.id_gym " +
                 "JOIN gym_members gm ON gm.id_member = c.id_instructor " +
                 "WHERE (CAST(? AS INTEGER) IS NULL OR c.id_gym = ?) " +
                 "AND (CAST(? AS DATE) IS NULL OR c.schedule >= ?) " +
                 "AND (CAST(? AS DATE) IS NULL OR c.schedule <= ?) " +
-                "ORDER BY c.schedule, c.time_from LIMIT 12";
+                "ORDER BY c.schedule, c.time_from LIMIT 6";
             
         if (date_from == null) {
             date_from = LocalDate.now().plusDays(1);
@@ -140,7 +141,7 @@ public class ClasseDaoImpl implements ClasseRepository {
             result.setGym_name(rs.getString("name"));
             result.setTrainer(rs.getString("first_name") + " " + rs.getString("last_name"));
             result.setCapacity(rs.getInt("capacity"));
-            result.setFilled(0);
+            result.setFilled(rs.getInt("enrolled"));
             return result;
         }
     }

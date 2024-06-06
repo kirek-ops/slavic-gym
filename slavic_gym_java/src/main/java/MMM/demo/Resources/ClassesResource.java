@@ -52,9 +52,15 @@ public class ClassesResource {
         return ResponseEntity.notFound().build();
       }
       newClass.setClass_name((String) requestBody.get("class_name"));
-      newClass.setSchedule(LocalDate.parse((String) requestBody.get("schedule")));
-      newClass.setTime_from(LocalTime.parse((String) requestBody.get("time_from")));
-      newClass.setTime_till(LocalTime.parse((String) requestBody.get("time_till")));
+
+      try {
+        newClass.setSchedule(LocalDate.parse((String) requestBody.get("schedule")));
+        newClass.setTime_from(LocalTime.parse((String) requestBody.get("time_from")));
+        newClass.setTime_till(LocalTime.parse((String) requestBody.get("time_till")));
+      } catch (Exception e) {
+        log.info("Error while parsing");
+        return ResponseEntity.ok("Invalid date or time");
+      }
       newClass.setId_gym((Integer) requestBody.get("id_gym"));
       newClass.setCapacity((Integer) requestBody.get("capacity"));
       newClass.setId_instructor((Integer) requestBody.get("id_instructor"));

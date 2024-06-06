@@ -88,7 +88,8 @@ const ClassBooking = () => {
 
       alert("Succesfully booked the class");
     } catch (error) {
-      alert(error);
+      console.log(error);
+      alert(error.body);
       return;
     }
   }

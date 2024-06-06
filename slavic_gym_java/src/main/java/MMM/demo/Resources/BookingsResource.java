@@ -58,7 +58,7 @@ public class BookingsResource {
         booking.setId_booking(new UuidGenerator("id_bookings").generateUniqueID());
       } catch (Exception e) {
         log.info("Error while generating id for booking. Aborting");
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().body("Error while generating id");
       }
 
       booking.setId_class((Integer)requestBody.get("id_class"));
@@ -69,12 +69,13 @@ public class BookingsResource {
         return ResponseEntity.ok("Succesfully booked the class");
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.ok(e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
       }
     }
 
     @GetMapping("/get-booked-classes/{id}")
     public ResponseEntity < List <ClassForPerson> > getBooked(@PathVariable Integer id) {
-      return bookingDaoImpl.getBookedClassesFromToday(id);
+      return ResponseEntity.ok(null);
+      // return bookingDaoImpl.getBookedClassesFromToday(id);
     }
 }

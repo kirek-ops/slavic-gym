@@ -85,9 +85,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Drop the existing trigger if it exists
-DROP TRIGGER IF EXISTS enforce_instructor_class_availability ON classes;
-
 -- Create the trigger to enforce the check constraint before inserting into the classes table
 -- Raises exception in case the instructor has intersecting classes at the same time
 CREATE TRIGGER enforce_instructor_class_availability
@@ -142,3 +139,67 @@ CREATE TRIGGER update_inventory_trigger
     AFTER INSERT ON transactions_inventory
     FOR EACH ROW
 EXECUTE FUNCTION update_inventory();
+
+
+-- Create the function to check for duplicate bookings
+CREATE OR REPLACE FUNCTION check_duplicate_booking()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM bookings
+        WHERE id_member = NEW.id_member
+          AND id_class = NEW.id_class
+    ) THEN
+        RAISE EXCEPTION 'This member has already booked this class.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger to execute the function before inserting into bookings
+CREATE TRIGGER check_duplicate_booking_trigger
+    BEFORE INSERT ON bookings
+    FOR EACH ROW
+EXECUTE FUNCTION check_duplicate_booking();
+
+
+-- Create the function to check class capacity
+CREATE OR REPLACE FUNCTION check_class_capacity()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF (SELECT COUNT(*) FROM bookings WHERE id_class = NEW.id_class) >=
+       (SELECT capacity FROM classes WHERE id_class = NEW.id_class) THEN
+        RAISE EXCEPTION 'The class is full, cannot accept more bookings';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger to enforce class capacity
+CREATE TRIGGER check_class_capacity_trigger
+    BEFORE INSERT ON bookings
+    FOR EACH ROW
+EXECUTE FUNCTION check_class_capacity();
+
+
+-- Step 1: Create the Trigger Function
+CREATE OR REPLACE FUNCTION check_member_not_instructor()
+    RETURNS TRIGGER AS $$
+BEGIN
+    -- Check if the member is not the instructor of the class
+    IF NEW.id_member = (SELECT id_instructor FROM classes WHERE id_class = NEW.id_class) THEN
+        RAISE EXCEPTION 'A member cannot book a class they are instructing';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Step 2: Create the Trigger
+CREATE TRIGGER trigger_check_member_not_instructor
+    BEFORE INSERT ON bookings
+    FOR EACH ROW
+EXECUTE FUNCTION check_member_not_instructor();
+
+

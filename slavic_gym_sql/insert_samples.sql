@@ -76,3 +76,17 @@ INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_ti
                                                                                                   (2, 2, 2, '2024-06-02 11:30:00', 1),
                                                                                                   (3, 3, 1, '2024-06-03 12:00:00', 3),
                                                                                                   (4, 4, 3, '2024-06-04 14:45:00', 1);
+
+-- Insert classes ensuring that only trainers and managers are assigned as instructors
+INSERT INTO classes (id_class, class_name, schedule, time_from, time_till, id_gym, capacity, id_instructor)
+VALUES
+    (1, 'Yoga Basics', '2024-06-10', '08:00:00', '09:00:00', 1, 20, 1), -- John Doe (Trainer)
+    (2, 'Advanced Cardio', '2024-06-10', '10:00:00', '11:30:00', 2, 30, 2), -- Jane Smith (Manager)
+    (3, 'Strength Training', '2024-06-11', '12:00:00', '13:30:00', 5, 25, 2), -- Jane Smith (Trainer)
+    (4, 'Pilates', '2024-06-12', '14:00:00', '15:00:00', 1, 20, 1), -- John Doe (Trainer)
+    (5, 'Spinning', '2024-06-13', '16:00:00', '17:00:00', 5, 15, 2), -- Jane Smith (Trainer)
+    (6, 'HIIT Workout', '2024-06-14', '18:00:00', '19:00:00', 1, 25, 1), -- John Doe (Trainer)
+    (7, 'Dance Aerobics', '2024-06-15', '19:30:00', '20:30:00', 2, 30, 2), -- Jane Smith (Manager)
+    (8, 'Meditation', '2024-06-16', '07:00:00', '08:00:00', 1, 15, 1), -- John Doe (Trainer)
+    (9, 'CrossFit', '2024-06-17', '09:00:00', '10:30:00', 2, 20, 2), -- Jane Smith (Manager)
+    (10, 'Boxing', '2024-06-18', '11:00:00', '12:30:00', 1, 10, 1); -- John Doe (Trainer)

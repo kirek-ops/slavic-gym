@@ -34,6 +34,8 @@ public class InventoryDaoImpl implements InventoryRepository {
         return jdbcTemplate.query(sql, new InventoryRowMapper(), id);
     }
 
+
+
     private static class InventoryRowMapper implements RowMapper<Inventory> {
         @Override
         public Inventory mapRow(ResultSet rs, int rowNum) throws SQLException {

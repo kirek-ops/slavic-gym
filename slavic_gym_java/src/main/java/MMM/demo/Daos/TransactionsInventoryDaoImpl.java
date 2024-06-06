@@ -15,6 +15,7 @@ import java.util.List;
 import java.time.OffsetDateTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 @Repository
 public class TransactionsInventoryDaoImpl implements TransactionsInventoryRepository {
@@ -27,6 +28,8 @@ public class TransactionsInventoryDaoImpl implements TransactionsInventoryReposi
         String sql = "SELECT * FROM transactions_inventory";
         return jdbcTemplate.query(sql, new TransactionsInventoryRowMapper());
     }
+
+
 
     private static class TransactionsInventoryRowMapper implements RowMapper<TransactionsInventory> {
         @Override

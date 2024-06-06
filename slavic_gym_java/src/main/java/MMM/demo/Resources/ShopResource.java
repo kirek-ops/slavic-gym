@@ -1,7 +1,9 @@
 package MMM.demo.Resources;
 
 import MMM.demo.Daos.InventoryDaoImpl;
+import MMM.demo.Daos.TransactionsInventoryDaoImpl;
 import MMM.demo.Entities.Inventory;
+import MMM.demo.Entities.TransactionsInventory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ShopResource {
     private final InventoryDaoImpl inventoryDao;
+    private final TransactionsInventoryDaoImpl transactionsInventoryDao;
 
     @PostMapping("/getallbyid")
     public ResponseEntity <List<Inventory>> getAllByGymId (@RequestBody Map<String, Object> body) {

@@ -168,7 +168,7 @@ const ClassSubmition = () => {
       </div>
     )}
 
-    <div className="container">
+    {/* <div className="container">
       <div className="header">Classes</div>
       {classes.map(classe => (
         <div key={classe.id_class} className="card">
@@ -183,7 +183,7 @@ const ClassSubmition = () => {
           </div>
           </div>
       ))}
-    </div>
+    </div> */}
   </div>
   );
 };

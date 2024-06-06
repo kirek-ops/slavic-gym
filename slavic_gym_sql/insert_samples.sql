@@ -78,3 +78,33 @@ INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_ti
                                                                                                   (2, 2, 2, '2024-06-02 11:30:00', 1),
                                                                                                   (3, 3, 1, '2024-06-03 12:00:00', 3),
                                                                                                   (4, 4, 3, '2024-06-04 14:45:00', 1);
+
+-- Insert classes ensuring that only trainers and managers are assigned as instructors
+INSERT INTO classes (id_class, class_name, schedule, time_from, time_till, id_gym, capacity, id_instructor)
+VALUES
+    ((SELECT nextval('id_classes')), 'Yoga Basics', '2024-06-10', '08:00:00', '09:00:00', 1, 20, 1), -- John Doe (Trainer)
+    ((SELECT nextval('id_classes')), 'Advanced Cardio', '2024-06-10', '10:00:00', '11:30:00', 2, 30, 2), -- Jane Smith (Manager)
+    ((SELECT nextval('id_classes')), 'Strength Training', '2024-06-11', '12:00:00', '13:30:00', 5, 25, 2), -- Jane Smith (Trainer)
+    ((SELECT nextval('id_classes')), 'Pilates', '2024-06-12', '14:00:00', '15:00:00', 1, 20, 1), -- John Doe (Trainer)
+    ((SELECT nextval('id_classes')), 'Spinning', '2024-06-13', '16:00:00', '17:00:00', 5, 15, 2), -- Jane Smith (Trainer)
+    ((SELECT nextval('id_classes')), 'HIIT Workout', '2024-06-14', '18:00:00', '19:00:00', 1, 25, 1), -- John Doe (Trainer)
+    ((SELECT nextval('id_classes')), 'Dance Aerobics', '2024-06-15', '19:30:00', '20:30:00', 2, 30, 2), -- Jane Smith (Manager)
+    ((SELECT nextval('id_classes')), 'Meditation', '2024-06-16', '07:00:00', '08:00:00', 1, 15, 1), -- John Doe (Trainer)
+    ((SELECT nextval('id_classes')), 'CrossFit', '2024-06-17', '09:00:00', '10:30:00', 2, 20, 2), -- Jane Smith (Manager)
+    ((SELECT nextval('id_classes')), 'Boxing', '2024-06-18', '11:00:00', '12:30:00', 1, 10, 1); -- John Doe (Trainer)
+
+INSERT INTO repetition_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Push Ups'),
+    (2, 'Squats'),
+    (3, 'Pull Ups'),
+    (4, 'Lunges'),
+    (5, 'Bicep Curls');
+
+INSERT INTO time_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Plank'),
+    (2, 'Wall Sit'),
+    (3, 'Running'),
+    (4, 'Cycling'),
+    (5, 'Jump Rope');

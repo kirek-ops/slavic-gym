@@ -37,3 +37,59 @@
     cursor: pointer;
     margin-top: 20px;
 }
+
+.chooser {
+    display: flex;
+    justify-content: space-around; /* Adjust alignment as needed */
+}
+
+/* Interface.css */
+
+/* Additional styles for ClassBooking */
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-gap: 20px; /* Gap between grid items */
+  }
+  
+  /* Additional styles for ClassItem */
+  .class-item {
+    height: 200px; /* Height for each class item */
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding for content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+    display: flex; /* Display as flexbox */
+    flex-direction: column; /* Arrange children in a column */
+    justify-content: space-between; /* Space elements evenly */
+  }
+  
+  .class-info {
+    flex: 1; /* Take remaining space */
+  }
+  
+  .class-name {
+    margin: 0; /* Remove default margin */
+    font-size: 20px; /* Increase font size for name */
+    color: #007BFF; /* Change color for name */
+  }
+  
+  .class-time {
+    margin: 0; /* Remove default margin */
+  }
+  
+  .class-details p {
+    margin: 5px 0; /* Margin for each detail */
+  }
+  
+  .book-button {
+    align-self: center; /* Center button horizontally */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 16px; /* Font size for button */
+    background-color: #007BFF; /* Background color for button */
+    color: white; /* Text color for button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor style */
+  }
+  

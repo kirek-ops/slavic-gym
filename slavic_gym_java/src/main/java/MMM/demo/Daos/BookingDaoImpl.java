@@ -12,6 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.sql.Types;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +34,23 @@ public class BookingDaoImpl implements BookingRepository {
     public List<Booking> findAll() {
         String sql = "SELECT * FROM bookings";
         return jdbcTemplate.query(sql, new BookingRowMapper());
+    }
+
+    public int insertBooking(Booking booking) throws Exception {
+        String sql = "INSERT INTO bookings (id_booking, id_member, id_class) " +
+                     "VALUES (?, ?, ?)";
+
+        Object[] params = {
+            booking.getId_booking(),
+            booking.getId_member(),
+            booking.getId_class()
+        };
+        int[] types = {
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER
+        };
+        return jdbcTemplate.update(sql, params, types);
     }
 
     private static class BookingRowMapper implements RowMapper<Booking> {

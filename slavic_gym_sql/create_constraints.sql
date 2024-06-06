@@ -13,3 +13,7 @@ ALTER TABLE employee_positions
 ALTER TABLE memberships
     ADD CONSTRAINT check_membership_duration
         CHECK (duration > 0);
+
+ALTER TABLE classes
+    ADD CONSTRAINT check_class_schedule_future
+        CHECK (schedule > CURRENT_DATE OR (schedule = CURRENT_DATE AND time_from > CURRENT_TIME));

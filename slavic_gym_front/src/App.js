@@ -9,8 +9,10 @@ import Home from './Components/Home';
 import Visits from './Components/Visits';
 import Membership from './Components/MembershipShop';
 import ClassSubmition from './Components/ClassSubmition';
+import ClassBooking from './Components/ClassBooking';
 import Shop from "./Components/Shop";
 import Cart from "./Components/Cart";
+import ProgressLogger from "./Components/ProgressLogger";
 
 function App() {
     return (
@@ -26,8 +28,10 @@ function App() {
                 <Route path="/availibleclasses" element={<h1>availibleclasses</h1>} />
                 <Route path="/membershipshop" element={<Membership />} />
                 <Route path="/submit-classes" element={<ClassSubmition />} />
+                <Route path="/book-class" element={<ClassBooking />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/progress-log" element={<ProgressLogger/>}/>
             </Routes>
         </Router>
     );

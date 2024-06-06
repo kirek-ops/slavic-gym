@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Load environment variables from .env file
 if [[ -f .env ]]; then
     export $(grep -v '^#' .env | xargs)
@@ -15,7 +14,7 @@ DB_USER="${DB_USER}"
 
 # SQL files
 SQL_FILES=("clear.sql" "sequences.sql" "create.sql" "insert_samples.sql"
-          "create_triggers.sql" "create_constraints.sql")
+          "create_triggers.sql" "create_constraints.sql" "create_functions.sql")
 
 # Execute each SQL file
 for sql_file in "${SQL_FILES[@]}"; do

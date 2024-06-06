@@ -152,7 +152,7 @@ CREATE TABLE repetition_goals (
     id_goal INT PRIMARY KEY,
     id_member INT,
     id_exercise INT,
-    target_reps INT NOT NULL,
+    reps_target INT NOT NULL,
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
     FOREIGN KEY (id_exercise) REFERENCES repetition_exercises(id_exercise)
 );
@@ -161,7 +161,7 @@ CREATE TABLE time_goals (
     id_goal INT PRIMARY KEY,
     id_member INT,
     id_exercise INT,
-    target_time INTERVAL NOT NULL,
+    minutes_target INT NOT NULL,
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
     FOREIGN KEY (id_exercise) REFERENCES time_exercises(id_exercise)
 );

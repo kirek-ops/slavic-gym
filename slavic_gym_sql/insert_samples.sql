@@ -44,3 +44,35 @@ INSERT INTO memberships (name, id_membership, is_active, price, duration) VALUES
     ('SUMMER FRESH', 1, true, 50.00, 30),
     ('SUMMER SUPER FRESH', 2, true, 100.00, 90),
     ('ID_TOP', 3, false, 150.00, 180);
+
+-- Insert categories
+INSERT INTO categories (id_category, category_name, parent_category_id) VALUES
+                                                                            (1, 'Supplements', NULL),
+                                                                            (2, 'Proteins', 1),
+                                                                            (3, 'Vitamins', 1),
+                                                                            (4, 'Equipment', NULL),
+                                                                            (5, 'Weights', 4),
+                                                                            (6, 'Cardio Machines', 4);
+
+-- Insert inventory items
+INSERT INTO inventory (id_item, item_name, quantity, id_gym, price) VALUES
+                                                                              (1, 'Whey Protein', 50, 1, 67.59),
+                                                                              (2, 'Multivitamin', 100, 1, 50.49),
+                                                                              (3, 'Dumbbells Set', 30, 1, 150.49),
+                                                                              (4, 'Treadmill', 10, 1, 1299.99),
+                                                                              (5, 'Water', 10, 5, 99.99),
+                                                                              (6, 'R-Weller Shot', 0, 1, 9.99);
+
+-- Insert product categories
+INSERT INTO products_categories (id_item, id_category) VALUES
+                                                           (1, 2),
+                                                           (2, 3),
+                                                           (3, 5),
+                                                           (4, 6);
+
+-- Insert transaction inventory
+INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES
+                                                                                                  (1, 1, 1, '2024-06-01 10:00:00', 2),
+                                                                                                  (2, 2, 2, '2024-06-02 11:30:00', 1),
+                                                                                                  (3, 3, 1, '2024-06-03 12:00:00', 3),
+                                                                                                  (4, 4, 3, '2024-06-04 14:45:00', 1);

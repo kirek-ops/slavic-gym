@@ -75,9 +75,8 @@ CREATE TABLE inventory (
     item_name VARCHAR(100) NOT NULL,
     quantity INT NOT NULL,
     id_gym INT,
-    id_category INT,
-    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym),
-    FOREIGN KEY (id_category) REFERENCES categories(id_category)
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_gym) REFERENCES gyms(id_gym)
 );
 
 CREATE TABLE products_categories (

@@ -203,3 +203,24 @@ CREATE TRIGGER trigger_check_member_not_instructor
 EXECUTE FUNCTION check_member_not_instructor();
 
 
+-- Create a function to check for booking conflicts(i.e. overlapping bookings)
+CREATE OR REPLACE FUNCTION check_booking_conflict() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM bookings b
+        WHERE b.id_member = NEW.id_member
+          AND (NEW.schedule, NEW.schedule + NEW.time_till - NEW.time_from)
+            OVERLAPS (b.schedule, b.schedule + b.time_till - b.time_from)
+    ) THEN
+        RAISE EXCEPTION 'Intersecting booking detected';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prevent_booking_conflict
+    BEFORE INSERT ON bookings
+    FOR EACH ROW
+EXECUTE FUNCTION check_booking_conflict();
+

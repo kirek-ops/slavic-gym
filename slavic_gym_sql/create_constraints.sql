@@ -26,3 +26,7 @@ ALTER TABLE gym_members
 ALTER TABLE inventory
     ADD CONSTRAINT unique_item_per_gym
         UNIQUE (id_gym, item_name);
+
+ALTER TABLE classes
+    ADD CONSTRAINT positive_capacity
+        CHECK (capacity > 0);

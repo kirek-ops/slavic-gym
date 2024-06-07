@@ -251,7 +251,7 @@ DECLARE
     completed_reps INT;
 BEGIN
     -- Retrieve the total repetitions done by the member for the exercise
-    SELECT COALESCE(MAX(reps_done), 0)
+    SELECT MAX(COALESCE(reps_done, 0))
     INTO completed_reps
     FROM exercise_logs_repetitions
     WHERE id_member = NEW.id_member
@@ -280,14 +280,14 @@ DECLARE
     completed_reps INT;
 BEGIN
     -- Retrieve the total repetitions done by the member for the exercise
-    SELECT COALESCE(MAX(reps_done), 0)
+    SELECT MAX(COALESCE(minutes_done, 0))
     INTO completed_reps
     FROM exercise_logs_time
     WHERE id_member = NEW.id_member
       AND id_exercise = NEW.id_exercise;
 
     -- Check if the total repetitions done is greater than or equal to the target repetitions
-    IF completed_reps >= NEW.reps_target THEN
+    IF completed_reps >= NEW.minutes_target THEN
         RAISE EXCEPTION 'Goal cannot be added. The target has already been completed.';
     END IF;
 
@@ -296,7 +296,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create the trigger to prevent insertion of completed goals
-CREATE TRIGGER prevent_completed_goal
+CREATE TRIGGER prevent_completed_goal_time
     BEFORE INSERT ON time_goals
     FOR EACH ROW
-EXECUTE FUNCTION check_goal_completed();
+EXECUTE FUNCTION check_goal_completed_time();

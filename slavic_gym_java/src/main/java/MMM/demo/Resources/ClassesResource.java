@@ -62,7 +62,7 @@ public class ClassesResource {
         return ResponseEntity.ok("Invalid date or time");
       }
       newClass.setId_gym((Integer) requestBody.get("id_gym"));
-      newClass.setCapacity((Integer) requestBody.get("capacity"));
+      newClass.setCapacity(Integer.valueOf(requestBody.get("capacity").toString()));
       newClass.setId_instructor((Integer) requestBody.get("id_instructor"));
 
       log.info(

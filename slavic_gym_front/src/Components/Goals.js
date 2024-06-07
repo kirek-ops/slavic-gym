@@ -15,6 +15,7 @@ const Goals = () => {
   const [repExercises, setRepExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const [goals, setGoals] = useState([]);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -28,7 +29,17 @@ const Goals = () => {
       }
     };
     fetchExercises();
-  }, []);
+
+    const fetchGoals = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/goals/get-goals/${id}`);
+        setGoals(response.data);
+      } catch (error) {
+        console.error('Error fetching goals:', error);
+      }
+    };
+    fetchGoals();
+  }, [id]);
 
   const handleTypeChange = (e) => {
     setExerciseType(e.target.value);
@@ -115,6 +126,18 @@ const Goals = () => {
               </div>
           )}
         </form>
+        <div className="goals-list">
+          <h2>Goals List</h2>
+          {goals.map((goal, index) => (
+              <div key={index} className="goal-card">
+                <div className="goal-title">{goal.exercise_name}</div>
+                <div className="goal-target">Target: {goal.target}</div>
+                <div className="goal-completion">
+                  Completion: {goal.completion ? goal.completion : 'Incomplete'}
+                </div>
+              </div>
+          ))}
+        </div>
         <div className="return-button-container">
           <button className="return-button" onClick={handleReturnClick}>
             Return

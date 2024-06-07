@@ -40,6 +40,37 @@
     max-width: 500px;
 }
 
+.goals-list {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.goals-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.goal-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.goal-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.goal-target,
+.goal-completion {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
 .return-button-container {
     display: flex;
     justify-content: center;

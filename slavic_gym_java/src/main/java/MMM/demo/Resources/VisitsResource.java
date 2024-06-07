@@ -46,7 +46,7 @@ public class VisitsResource {
         }
 
         try {
-            Integer newId = UuidGenerator.generateUniqueID();
+            Integer newId = new UuidGenerator("id_visit").generateUniqueID();
             Visit newVisit = new Visit();
             newVisit.setId_visit(newId);
             newVisit.setId_member(memberId);

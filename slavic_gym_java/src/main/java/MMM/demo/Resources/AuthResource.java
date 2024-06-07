@@ -5,6 +5,7 @@ import MMM.demo.Entities.Gym;
 import MMM.demo.Entities.GymMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +23,13 @@ public class AuthResource {
 
     @PostMapping("/login")
     public ResponseEntity <Map <String, Object>> login (@RequestParam String email) {
-        GymMember user = gymMemberDaoImpl.findByEmail(email);
-        if (user == null) {
-            return ResponseEntity.ok(Map.of("success", false));
-        } else {
+        try {
+            GymMember user = gymMemberDaoImpl.findByEmail(email);
             return ResponseEntity.ok(Map.of("success", true,
                                             "id", user.getId_member(),
                                             "correctPassword", user.getPasswd()));
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "Incorrect email or password"));
         }
     }
 

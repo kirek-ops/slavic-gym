@@ -40,6 +40,17 @@
     max-width: 500px;
 }
 
+.logs-section {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+.logs-section h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .return-button-container {
     display: flex;
     justify-content: center;

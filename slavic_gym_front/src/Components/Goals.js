@@ -16,6 +16,7 @@ const Goals = () => {
   const [selectedExercise, setSelectedExercise] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [goals, setGoals] = useState([]);
+  const [selectedGoal, setSelectedGoal] = useState(null);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -50,6 +51,11 @@ const Goals = () => {
   const handleExerciseChange = (e) => {
     setSelectedExercise(e.target.value);
     setInputValue('');
+  };
+
+  const handleGoalChange = (e) => {
+    const selectedGoal = goals.find(goal => goal.exercise_name === e.target.value);
+    setSelectedGoal(selectedGoal);
   };
 
   const handleInputChange = (e) => {
@@ -128,15 +134,25 @@ const Goals = () => {
         </form>
         <div className="goals-list">
           <h2>Goals List</h2>
-          {goals.map((goal, index) => (
-              <div key={index} className="goal-card">
-                <div className="goal-title">{goal.exercise_name}</div>
-                <div className="goal-target">Target: {goal.target}</div>
-                <div className="goal-completion">
-                  Completion: {goal.completion ? goal.completion : 'Incomplete'}
-                </div>
+          <label>
+            Choose Goal to View Description:
+            <select onChange={handleGoalChange}>
+              <option value="">Select...</option>
+              {goals.map((goal, index) => (
+                  <option key={index} value={goal.exercise_name}>
+                    {goal.exercise_name}
+                  </option>
+              ))}
+            </select>
+          </label>
+          {selectedGoal && (
+              <div className="goal-description">
+                <h3>{selectedGoal.exercise_name}</h3>
+                <p>{selectedGoal.description}</p>
+                <p>Target: {selectedGoal.target}</p>
+                <p>Completion: {selectedGoal.completion ? selectedGoal.completion : 'Incomplete'}</p>
               </div>
-          ))}
+          )}
         </div>
         <div className="return-button-container">
           <button className="return-button" onClick={handleReturnClick}>

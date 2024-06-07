@@ -1,7 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import '../Css/ProgressLogger.css'; // Import CSS for ProgressLogger
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const ProgressLogger = () => {
   const location = useLocation();
@@ -13,6 +34,9 @@ const ProgressLogger = () => {
   const [repExercises, setRepExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const [logs, setLogs] = useState({});
+  const [selectedLogExercise, setSelectedLogExercise] = useState('');
+  const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -26,7 +50,18 @@ const ProgressLogger = () => {
       }
     };
     fetchExercises();
-  }, []);
+
+    const fetchLogs = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/logs/get-logs/${id}`);
+        console.log(response.data);
+        setLogs(response.data);
+      } catch (error) {
+        console.error('Error fetching logs:', error);
+      }
+    };
+    fetchLogs();
+  }, [id]);
 
   const handleTypeChange = (e) => {
     setExerciseType(e.target.value);
@@ -64,6 +99,25 @@ const ProgressLogger = () => {
 
   const handleReturnClick = () => {
     navigate('/interface', { state: { id: id } });
+  };
+
+  const handleLogExerciseChange = (e) => {
+    setSelectedLogExercise(e.target.value);
+    const selectedLogs = logs[e.target.value] || [];
+    const labels = selectedLogs.map(log => log.log_date);
+    const data = selectedLogs.map(log => log.done);
+
+    setChartData({
+      labels: labels,
+      datasets: [
+        {
+          label: e.target.value,
+          data: data,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        },
+      ],
+    });
   };
 
   return (
@@ -113,6 +167,25 @@ const ProgressLogger = () => {
               </div>
           )}
         </form>
+        <div className="logs-section">
+          <h2>Exercise Logs</h2>
+          <label>
+            Choose Exercise to View Progress:
+            <select value={selectedLogExercise} onChange={handleLogExerciseChange}>
+              <option value="">Select...</option>
+              {Object.keys(logs).map((exerciseName, index) => (
+                  <option key={index} value={exerciseName}>
+                    {exerciseName}
+                  </option>
+              ))}
+            </select>
+          </label>
+          {chartData && (
+              <div className="chart-container">
+                <Line data={chartData} />
+              </div>
+          )}
+        </div>
         <div className="return-button-container">
           <button className="return-button" onClick={handleReturnClick}>
             Return

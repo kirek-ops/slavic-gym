@@ -242,3 +242,61 @@ CREATE TRIGGER check_overlapping_bookings_trigger
     BEFORE INSERT ON bookings
     FOR EACH ROW
 EXECUTE FUNCTION check_overlapping_bookings();
+
+
+-- Create the function to check if the goal is already completed
+CREATE OR REPLACE FUNCTION check_goal_completed()
+    RETURNS TRIGGER AS $$
+DECLARE
+    completed_reps INT;
+BEGIN
+    -- Retrieve the total repetitions done by the member for the exercise
+    SELECT COALESCE(MAX(reps_done), 0)
+    INTO completed_reps
+    FROM exercise_logs_repetitions
+    WHERE id_member = NEW.id_member
+      AND id_exercise = NEW.id_exercise;
+
+    -- Check if the total repetitions done is greater than or equal to the target repetitions
+    IF completed_reps >= NEW.reps_target THEN
+        RAISE EXCEPTION 'Goal cannot be added. The target has already been completed.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger to prevent insertion of completed goals
+CREATE TRIGGER prevent_completed_goal
+    BEFORE INSERT ON repetition_goals
+    FOR EACH ROW
+EXECUTE FUNCTION check_goal_completed();
+
+
+-- Create the function to check if the goal is already completed
+CREATE OR REPLACE FUNCTION check_goal_completed_time()
+    RETURNS TRIGGER AS $$
+DECLARE
+    completed_reps INT;
+BEGIN
+    -- Retrieve the total repetitions done by the member for the exercise
+    SELECT COALESCE(MAX(reps_done), 0)
+    INTO completed_reps
+    FROM exercise_logs_time
+    WHERE id_member = NEW.id_member
+      AND id_exercise = NEW.id_exercise;
+
+    -- Check if the total repetitions done is greater than or equal to the target repetitions
+    IF completed_reps >= NEW.reps_target THEN
+        RAISE EXCEPTION 'Goal cannot be added. The target has already been completed.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger to prevent insertion of completed goals
+CREATE TRIGGER prevent_completed_goal
+    BEFORE INSERT ON time_goals
+    FOR EACH ROW
+EXECUTE FUNCTION check_goal_completed();

@@ -33,14 +33,12 @@ public class TransactionsInventoryDaoImpl implements TransactionsInventoryReposi
 
 
 
-    public int insertTransaction(TransactionsInventory transaction) {
-        log.info("Inserting transaction: " + transaction.toString());
+    public void insertTransaction(TransactionsInventory transaction) {
+        log.info("Inserting transaction: " + transaction.getId_transaction() + " " + transaction.getId_item() + " " + transaction.getId_member() + " " + transaction.getOrder_time() + " " + transaction.getQuantity());
         String sql = "INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES (?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_item(), transaction.getId_member(),
+        jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_item(), transaction.getId_member(),
                 Timestamp.valueOf(transaction.getOrder_time().toLocalDateTime()), transaction.getQuantity());
     }
-
-
 
     private static class TransactionsInventoryRowMapper implements RowMapper<TransactionsInventory> {
         @Override

@@ -39,6 +39,13 @@ public class InventoryDaoImpl implements InventoryRepository {
         return jdbcTemplate.queryForObject(sql, new InventoryRowMapper(), item, gym);
     }
 
+    public void insertProduct(Inventory inventory, Integer category) {
+        String sql = "INSERT INTO inventory (id_item, item_name, quantity, id_gym, price) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, inventory.getId_item(), inventory.getItem_name(), inventory.getQuantity(), inventory.getId_gym(), inventory.getPrice());
+        sql = "INSERT INTO products_categories (id_item, id_category) VALUES (?, ?)";
+        jdbcTemplate.update(sql, inventory.getId_item(), category);
+    }
+
     private static class InventoryRowMapper implements RowMapper<Inventory> {
         @Override
         public Inventory mapRow(ResultSet rs, int rowNum) throws SQLException {

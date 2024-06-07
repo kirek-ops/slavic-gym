@@ -6,7 +6,7 @@ import '../Css/Interface.css';
 const Interface = () => {
     const location = useLocation();
     const id = location.state.id;
-    const email = location.state.email;
+    const email = location.state.email || localStorage.getItem('email');
 
     const navigate = useNavigate();
 

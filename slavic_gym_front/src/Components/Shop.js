@@ -171,6 +171,10 @@ const Shop = () => {
         }
     };
 
+    const handleReturnClick = () => {
+        navigate('/interface', { state: { id } });
+    }
+
     return (
         <div className="shop-container">
             <h1>Gym Shop</h1>
@@ -185,7 +189,8 @@ const Shop = () => {
                 <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
                     <option value="All">All</option>
                     {Object.values(categories).map(category => (
-                        <option key={category.id_category} value={category.category_name}>{category.category_name}</option>
+                        <option key={category.id_category}
+                                value={category.category_name}>{category.category_name}</option>
                     ))}
                 </select>
             </div>
@@ -220,6 +225,7 @@ const Shop = () => {
                     <p>No items available.</p>
                 )}
             </div>
+            <button onClick={handleReturnClick} className="return-button">Return</button>
         </div>
     );
 };

@@ -66,7 +66,7 @@ public class LogsResource {
       ExerciseLogsRepetition curLog = new ExerciseLogsRepetition();
 
       try {
-        curLog.setId_log(new UuidGenerator("id_logs_time").generateUniqueID());
+        curLog.setId_log(new UuidGenerator("id_logs_reps").generateUniqueID());
       } catch (Exception e) {
         log.info("Error while generating id for log. Aborting");
         return ResponseEntity.badRequest().body("Error while generating id");

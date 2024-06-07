@@ -7,7 +7,6 @@ const Interface = () => {
     const location = useLocation();
     const id = location.state.id;
     const email = location.state.email || localStorage.getItem('email');
-
     const navigate = useNavigate();
 
     const [gyms, setGyms] = useState([]);
@@ -17,7 +16,6 @@ const Interface = () => {
     const [hasPosition, setHasPosition] = useState({});
 
     useEffect(() => {
-        // Get user geolocation
         navigator.geolocation.getCurrentPosition(
             position => {
                 setUserLocation({
@@ -49,7 +47,6 @@ const Interface = () => {
         async function fetchData() {
             try {
                 const response = await axios.get(`http://localhost:8080/employees/${id}/get-positions`);
-                console.log(response.data);
                 setPositions(response.data);
             } catch (error) {
                 console.log("Error while obtaining positions");
@@ -71,7 +68,6 @@ const Interface = () => {
         } else {
             setHasPosition({});
         }
-        console.log(hasPosition);
     }, [positions]);
 
     useEffect(() => {
@@ -100,7 +96,6 @@ const Interface = () => {
 
     }, [userLocation, gyms]);
 
-
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const toRad = (value) => (value * Math.PI) / 180;
         const R = 6371; // Radius of the Earth in km
@@ -111,10 +106,8 @@ const Interface = () => {
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c; // Distance in km
-        return distance;
+        return R * c; // Distance in km
     };
-
 
     const handleGymChange = (event) => {
         setSelectedGym(event.target.value);
@@ -130,20 +123,15 @@ const Interface = () => {
     const handleQRButtonClick = async () => {
         const response = await axios.post(`http://localhost:8080/memberships/getbyid`, { id });
 
-        console.log(response);
-
         if (Array.isArray(response.data)) {
             const memberships = response.data;
             const activeMemberships = memberships.filter(m => !isExpired(m));
 
-            console.log(activeMemberships.length);
-
-            if (activeMemberships.length == 0) {
+            if (activeMemberships.length === 0) {
                 alert('You have no active memberships');
                 return;
             }
-        }
-        else {
+        } else {
             alert('You have no active memberships');
             return;
         }
@@ -157,47 +145,43 @@ const Interface = () => {
 
     const handleMembershipShopClick = () => {
         navigate('/membershipshop', { state: { id: id, email: email } });
-    }
+    };
 
     const handleVisitsButton = () => {
         navigate('/visits', { state: { id: id, email: email } });
-    }
+    };
 
     const handleSubmitClass = () => {
         navigate('/submit-classes', { state: { id: id, hasPosition: hasPosition, gyms: gyms } });
-    }
+    };
 
     const handleCreateProduct = () => {
-        console.log(id);
-        console.log(hasPosition);
-        console.log(gyms);
         navigate('/create-product', { state: { id: id, hasPosition: hasPosition, gym: gyms } });
-    }
+    };
 
-    const handleNavigateToBookins = () => {
+    const handleNavigateToBookings = () => {
         navigate('/book-class', { state: { id: id, gyms: gyms } });
-    }
+    };
 
     const handleNavigateToLogger = () => {
         navigate('/progress-log', { state: { id: id } });
-    }
+    };
 
     const handleNavigateToGoals = () => {
-        navigate('/set-goals', { state : { id: id } });
-    }
+        navigate('/set-goals', { state: { id: id } });
+    };
 
     const handleShopButton = () => {
         if (selectedGym) {
-            navigate('/shop', {state: {id: id, gym: selectedGym}});
+            navigate('/shop', { state: { id: id, gym: selectedGym } });
         } else {
             alert("Please select a gym before proceeding.");
         }
-    }
+    };
 
     return (
         <div className="interface-container">
             <h1 className="interface-header">Welcome to the Gym App</h1>
-
             <div className="select-container">
                 <label htmlFor="gym-select" className="label">Choose a gym:</label>
                 <select id="gym-select" className="select" value={selectedGym} onChange={handleGymChange}>
@@ -207,18 +191,19 @@ const Interface = () => {
                     ))}
                 </select>
             </div>
-
-            <button className="button" onClick={handleQRButtonClick}>Get My QR Code</button>
-            <button className="button" onClick={handleVisitsButton}>See my visits</button>
-            <button className="button" onClick={handleMembershipShopClick}>My memberships</button>
-            <button className="button" onClick={handleShopButton}>Shop</button>
-            { hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleSubmitClass}>Submit class</button>) : null}
-            { hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleCreateProduct}>Create Product</button>) : null}
-            <button className="button" onClick={handleNavigateToBookins}>Book a class</button>
-            <button className="button" onClick={handleNavigateToLogger}>Log your progress</button>
-            <button className="button" onClick={handleNavigateToGoals}>Check your goals</button>
+            <div className="button-container">
+                <button className="button" onClick={handleQRButtonClick}>Get My QR Code</button>
+                <button className="button" onClick={handleVisitsButton}>See my visits</button>
+                <button className="button" onClick={handleMembershipShopClick}>My memberships</button>
+                <button className="button" onClick={handleShopButton}>Shop</button>
+                {hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleSubmitClass}>Submit class</button>) : null}
+                {hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleCreateProduct}>Create Product</button>) : null}
+                <button className="button" onClick={handleNavigateToBookings}>Book a class</button>
+                <button className="button" onClick={handleNavigateToLogger}>Log your progress</button>
+                <button className="button" onClick={handleNavigateToGoals}>Check your goals</button>
+            </div>
         </div>
     );
-}
+};
 
 export default Interface;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
+import '../Css/Login.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +13,6 @@ const Login = () => {
         // Clear local storage when the component mounts
         localStorage.clear();
     }, []);
-
 
     const handleLogin = async () => {
         try {
@@ -31,22 +31,20 @@ const Login = () => {
                 alert(response.data.message || 'Incorrect email or password');
             }
         } catch (error) {
-            alert('Something went wrong on server...');
+            alert('Something went wrong on the server...');
             console.error(error);
         }
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <label style={{ marginBottom: '10px' }}>Email:</label>
-            <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
-            <br/>
+        <div className="login-container">
+            <label>Email:</label>
+            <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-            <label style={{ marginBottom: '10px' }}>Password:</label>
-            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ marginBottom: '20px', padding: '10px', fontSize: '16px' }}/>
-            <br/>
+            <label>Password:</label>
+            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-            <button onClick={handleLogin} style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Login</button>
+            <button className={"login-button"} onClick={handleLogin}>Login</button>
         </div>
     );
 }

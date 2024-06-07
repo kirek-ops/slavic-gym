@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PhoneValidator {
-    private static final String PHONE_REGEX = "^\\+?[1-9]\\d{1,14}$";
+    private static final String PHONE_REGEX = "^\\+?[1-9]\\d{1,12}$";
     private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REGEX);
 
     public static boolean isValidPhone(String phone) {

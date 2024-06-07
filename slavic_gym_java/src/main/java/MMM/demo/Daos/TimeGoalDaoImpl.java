@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 import java.time.Duration;
@@ -28,6 +29,24 @@ public class TimeGoalDaoImpl implements TimeGoalRepository {
         return jdbcTemplate.query(sql, new TimeGoalRowMapper());
     }
 
+    public int insertGoal(TimeGoal goal) {
+        String sql = "INSERT INTO time_goals (id_goal, id_member, id_exercise, minutes_target) " +
+                    "VALUES (?, ?, ?, ?)";
+        Object[] params = {
+            goal.getId_goal(),
+            goal.getId_member(),
+            goal.getId_exercise(),
+            goal.getMinutes_target()
+        };
+        int[] types = {
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER
+        };
+        return jdbcTemplate.update(sql, params, types);
+    }
+
     private static class TimeGoalRowMapper implements RowMapper<TimeGoal> {
         @Override
         public TimeGoal mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -35,7 +54,7 @@ public class TimeGoalDaoImpl implements TimeGoalRepository {
             result.setId_goal(rs.getInt("id_goal"));
             result.setId_member(rs.getInt("id_member"));
             result.setId_exercise(rs.getInt("id_exercise"));
-            result.setTarget_time(Duration.ofMillis(rs.getLong("target_time")));
+            result.setMinutes_target(rs.getInt("minutes_target"));
             return result;
         }
     }

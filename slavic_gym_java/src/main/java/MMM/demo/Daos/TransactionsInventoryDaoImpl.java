@@ -31,10 +31,12 @@ public class TransactionsInventoryDaoImpl implements TransactionsInventoryReposi
         return jdbcTemplate.query(sql, new TransactionsInventoryRowMapper());
     }
 
-    public void insertTransaction(TransactionsInventory transaction) {
+
+
+    public int insertTransaction(TransactionsInventory transaction) {
         log.info("Inserting transaction: " + transaction.toString());
         String sql = "INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_item(), transaction.getId_member(),
+        return jdbcTemplate.update(sql, transaction.getId_transaction(), transaction.getId_item(), transaction.getId_member(),
                 Timestamp.valueOf(transaction.getOrder_time().toLocalDateTime()), transaction.getQuantity());
     }
 

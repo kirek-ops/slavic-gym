@@ -46,13 +46,13 @@ INSERT INTO memberships (name, id_membership, is_active, price, duration) VALUES
     ('ID_TOP', 3, false, 150.00, 180);
 
 -- Insert categories
-INSERT INTO categories (id_category, category_name, parent_category_id) VALUES
-                                                                            (1, 'Supplements', NULL),
-                                                                            (2, 'Proteins', 1),
-                                                                            (3, 'Vitamins', 1),
-                                                                            (4, 'Equipment', NULL),
-                                                                            (5, 'Weights', 4),
-                                                                            (6, 'Cardio Machines', 4);
+INSERT INTO categories (id_category, category_name) VALUES
+                                                                            (1, 'Supplements'),
+                                                                            (2, 'Proteins'),
+                                                                            (3, 'Vitamins'),
+                                                                            (4, 'Equipment'),
+                                                                            (5, 'Weights'),
+                                                                            (6, 'Cardio Machines');
 
 -- Insert inventory items
 INSERT INTO inventory (id_item, item_name, quantity, id_gym, price) VALUES
@@ -68,7 +68,9 @@ INSERT INTO products_categories (id_item, id_category) VALUES
                                                            (1, 2),
                                                            (2, 3),
                                                            (3, 5),
-                                                           (4, 6);
+                                                           (4, 6),
+                                                           (6, 1),
+                                                           (5, 1);
 
 -- Insert transaction inventory
 INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES
@@ -90,3 +92,19 @@ VALUES
     ((SELECT nextval('id_classes')), 'Meditation', '2024-06-16', '07:00:00', '08:00:00', 1, 15, 1), -- John Doe (Trainer)
     ((SELECT nextval('id_classes')), 'CrossFit', '2024-06-17', '09:00:00', '10:30:00', 2, 20, 2), -- Jane Smith (Manager)
     ((SELECT nextval('id_classes')), 'Boxing', '2024-06-18', '11:00:00', '12:30:00', 1, 10, 1); -- John Doe (Trainer)
+
+INSERT INTO repetition_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Push Ups'),
+    (2, 'Squats'),
+    (3, 'Pull Ups'),
+    (4, 'Lunges'),
+    (5, 'Bicep Curls');
+
+INSERT INTO time_exercises (id_exercise, exercise_name)
+VALUES 
+    (1, 'Plank'),
+    (2, 'Wall Sit'),
+    (3, 'Running'),
+    (4, 'Cycling'),
+    (5, 'Jump Rope');

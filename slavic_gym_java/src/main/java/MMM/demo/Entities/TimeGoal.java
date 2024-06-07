@@ -15,6 +15,6 @@ public class TimeGoal {
 
     private Integer id_exercise;
 
-    private Duration target_time;
+    private Integer minutes_target;
 
 }

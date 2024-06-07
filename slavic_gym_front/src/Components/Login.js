@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
@@ -7,6 +7,12 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Clear local storage when the component mounts
+        localStorage.clear();
+    }, []);
+
 
     const handleLogin = async () => {
         try {

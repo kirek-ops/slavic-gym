@@ -15,6 +15,6 @@ public class RepetitionGoal {
 
     private Integer id_exercise;
 
-    private Integer target_reps;
+    private Integer reps_target;
 
 }

@@ -13,6 +13,4 @@ public class Categorie {
 
     private String category_name;
 
-    private Integer parent_category_id;
-
 }

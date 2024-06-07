@@ -171,6 +171,14 @@ const Interface = () => {
         navigate('/book-class', { state: { id: id, gyms: gyms } });
     }
 
+    const handleNavigateToLogger = () => {
+        navigate('/progress-log', { state: { id: id } });
+    }
+
+    const handleNavigateToGoals = () => {
+        navigate('/set-goals', { state : { id: id } });
+    }
+
     const handleShopButton = () => {
         if (selectedGym) {
             navigate('/shop', {state: {id: id, gym: selectedGym}});
@@ -199,6 +207,8 @@ const Interface = () => {
             <button className="button" onClick={handleShopButton}>Shop</button>
             { hasPosition['Trainer'] || hasPosition['Manager'] ? (<button className="button" onClick={handleSubmitClass}>Submit class</button>) : null}
             <button className="button" onClick={handleNavigateToBookins}>Book a class</button>
+            <button className="button" onClick={handleNavigateToLogger}>Log your progress</button>
+            <button className="button" onClick={handleNavigateToGoals}>Check your goals</button>
         </div>
     );
 }

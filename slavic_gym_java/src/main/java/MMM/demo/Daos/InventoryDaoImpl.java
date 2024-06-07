@@ -34,7 +34,10 @@ public class InventoryDaoImpl implements InventoryRepository {
         return jdbcTemplate.query(sql, new InventoryRowMapper(), id);
     }
 
-
+    public Inventory findByItemId (Integer item, Integer gym) {
+        String sql = "SELECT * FROM inventory WHERE id_item = ? AND id_gym = ?";
+        return jdbcTemplate.queryForObject(sql, new InventoryRowMapper(), item, gym);
+    }
 
     private static class InventoryRowMapper implements RowMapper<Inventory> {
         @Override

@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -24,9 +25,29 @@ public class ExerciseLogsTimeDaoImpl implements ExerciseLogsTimeRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<ExerciseLogsTime> findAll() {
+    public List <ExerciseLogsTime> findAll() {
         String sql = "SELECT * FROM exercise_logs_time";
         return jdbcTemplate.query(sql, new ExerciseLogsTimeRowMapper());
+    }
+
+    public int insertLog(ExerciseLogsTime curLog) {
+        String sql = "INSERT INTO exercise_logs_time (id_log, id_member, id_exercise, log_date, minutes_done) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+        Object[] params = {
+            curLog.getId_log(),
+            curLog.getId_member(),
+            curLog.getId_exercise(),
+            curLog.getLog_date(),
+            curLog.getMinutes_done()
+        };
+        int[] types = {
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.DATE,
+            Types.INTEGER
+        };
+        return jdbcTemplate.update(sql, params, types);
     }
 
     private static class ExerciseLogsTimeRowMapper implements RowMapper<ExerciseLogsTime> {
@@ -35,9 +56,9 @@ public class ExerciseLogsTimeDaoImpl implements ExerciseLogsTimeRepository {
             ExerciseLogsTime result = new ExerciseLogsTime();
             result.setId_log(rs.getInt("id_log"));
             result.setId_member(rs.getInt("id_member"));
-            result.setId_goal(rs.getInt("id_goal"));
-            result.setLog_date(rs.getObject("log_date", OffsetDateTime.class));
-            result.setTime_done(Duration.ofMillis(rs.getLong("time_done")));
+            result.setId_exercise(rs.getInt("id_exercise"));
+            result.setLog_date(rs.getDate("log_date").toLocalDate());
+            result.setMinutes_done(rs.getInt("minutes_done"));
             return result;
         }
     }

@@ -1,7 +1,9 @@
 package MMM.demo.Resources;
 
+import MMM.demo.Daos.CategorieDaoImpl;
 import MMM.demo.Daos.InventoryDaoImpl;
 import MMM.demo.Daos.TransactionsInventoryDaoImpl;
+import MMM.demo.Entities.Categorie;
 import MMM.demo.Entities.Inventory;
 import MMM.demo.Entities.TransactionsInventory;
 import MMM.demo.Utils.UuidGenerator;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,7 @@ import java.util.Map;
 public class ShopResource {
     private final InventoryDaoImpl inventoryDao;
     private final TransactionsInventoryDaoImpl transactionsInventoryDao;
+    private final CategorieDaoImpl categorieDao;
 
     @PostMapping("/getallbyid")
     public ResponseEntity <List<Inventory>> getAllByGymId (@RequestBody Map<String, Object> body) {
@@ -32,20 +36,39 @@ public class ShopResource {
         return ResponseEntity.ok(inventory);
     }
 
+    @PostMapping("/getbyiditem")
+    public ResponseEntity <Inventory> getByItemId (@RequestBody Map<String, Object> body) {
+        log.info("Body " + (Integer) body.get("itemId") + " " + (Integer) body.get("gymId"));
+        Inventory inventory = inventoryDao.findByItemId((Integer) body.get("itemId"), (Integer) body.get("gymId"));
+        log.info("Inventory " + inventory);
+        return ResponseEntity.ok(inventory);
+    }
+
+    @PostMapping("/getcategories")
+        public ResponseEntity <Map <Integer, Categorie>> getCategories (@RequestBody List <Integer> ids) {
+        Map <Integer, Categorie> categories = new HashMap<>();
+        for (Integer id : ids) {
+            Categorie categorie = categorieDao.findById(id);
+            categories.put(id, categorie);
+        }
+        return ResponseEntity.ok(categories);
+    }
+
     @PostMapping("/buy")
     @Transactional(rollbackOn = Exception.class)
-    public ResponseEntity<String> buy(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<Map <String, Object>> buy(@RequestBody Map<String, Object> body) {
         log.info("Buying items: " + body.toString());
+        Integer last = null;
         try {
             Integer id = Integer.parseInt(body.get("id").toString());
             Integer gym = Integer.parseInt(body.get("gym").toString());
             ArrayList<Map<String, Object>> items = (ArrayList<Map<String, Object>>) body.get("items");
 
-
             // Begin the transaction
             for (Map<String, Object> item : items) {
                 Integer itemId = Integer.parseInt(item.get("id_item").toString());
                 Integer quantity = Integer.parseInt((item.get("quantity")).toString());
+                last = itemId;
 
                 TransactionsInventory transaction = new TransactionsInventory();
                 transaction.setId_transaction(new UuidGenerator("id_transaction").generateUniqueID());
@@ -53,12 +76,15 @@ public class ShopResource {
                 transaction.setId_member(id);
                 transaction.setOrder_time(OffsetDateTime.now());
                 transaction.setQuantity(quantity);
-                transactionsInventoryDao.insertTransaction(transaction);
+                if (transactionsInventoryDao.insertTransaction(transaction) == 0) {
+                    throw new Exception("Failed to insert transaction");
+                }
             }
-            return ResponseEntity.ok("Items successfully bought!");
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
-            log.error("Error buying items: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error buying items: " + e.getMessage());
+            log.error("Error buying items: " + last);
+            return ResponseEntity.ok(Map.of("success", false,
+                                            "erroredItem", last));
         }
     }
 

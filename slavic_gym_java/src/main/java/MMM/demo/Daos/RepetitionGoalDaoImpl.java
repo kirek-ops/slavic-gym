@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 
@@ -28,6 +29,24 @@ public class RepetitionGoalDaoImpl implements RepetitionGoalRepository {
         return jdbcTemplate.query(sql, new RepetitionGoalRowMapper());
     }
 
+    public int insertGoal(RepetitionGoal goal) {
+        String sql = "INSERT INTO repetition_goals (id_goal, id_member, id_exercise, reps_target) " +
+                    "VALUES (?, ?, ?, ?)";
+        Object[] params = {
+            goal.getId_goal(),
+            goal.getId_member(),
+            goal.getId_exercise(),
+            goal.getReps_target()
+        };
+        int[] types = {
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER,
+            Types.INTEGER
+        };
+        return jdbcTemplate.update(sql, params, types);
+    }
+
     private static class RepetitionGoalRowMapper implements RowMapper<RepetitionGoal> {
         @Override
         public RepetitionGoal mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -35,7 +54,7 @@ public class RepetitionGoalDaoImpl implements RepetitionGoalRepository {
             result.setId_goal(rs.getInt("id_goal"));
             result.setId_member(rs.getInt("id_member"));
             result.setId_exercise(rs.getInt("id_exercise"));
-            result.setTarget_reps(rs.getInt("target_reps"));
+            result.setReps_target(rs.getInt("reps_target"));
             return result;
         }
     }

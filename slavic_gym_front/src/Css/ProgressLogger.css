@@ -1,0 +1,61 @@
+/* ProgressLogger.css */
+
+.progress-logger-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.progress-logger-container form {
+    width: 100%;
+    max-width: 500px;
+}
+
+.progress-logger-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.progress-logger-container select,
+.progress-logger-container input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.progress-logger-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 500px;
+}
+
+.return-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: fixed;
+    bottom: 20px;
+}
+
+.return-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 500px;
+}

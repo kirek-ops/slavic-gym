@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
-import '../Css/ClassSubmition.css'; // Import CSS file
-import '../Css/ClassesList.css';
+import '../Css/ProgressLogger.css'; // Import CSS for ProgressLogger
 
 const ProgressLogger = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { id } = location.state;
 
   const [exerciseType, setExerciseType] = useState('');
@@ -62,52 +62,63 @@ const ProgressLogger = () => {
     }
   };
 
+  const handleReturnClick = () => {
+    navigate('/interface', { state: { id: id } });
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Choose Exercise Type:
-          <select value={exerciseType} onChange={handleTypeChange}>
-            <option value="">Select...</option>
-            <option value="time">Time</option>
-            <option value="repetition">Repetitions</option>
-          </select>
-        </label>
+      <div className="progress-logger-container">
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>
+              Choose Exercise Type:
+              <select value={exerciseType} onChange={handleTypeChange}>
+                <option value="">Select...</option>
+                <option value="time">Time</option>
+                <option value="repetition">Repetitions</option>
+              </select>
+            </label>
+          </div>
+          {exerciseType && (
+              <div>
+                <label>
+                  Choose Exercise:
+                  <select value={selectedExercise} onChange={handleExerciseChange}>
+                    <option value="">Select...</option>
+                    {(exerciseType === 'time' ? timeExercises : repExercises).map((exercise) => (
+                        <option key={exercise.id_exercise} value={exercise.id_exercise}>
+                          {exercise.exercise_name}
+                        </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+          )}
+          {selectedExercise && (
+              <div>
+                <label>
+                  {exerciseType === 'time' ? 'Time (minutes):' : 'Repetitions:'}
+                  <input
+                      type="number"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </label>
+              </div>
+          )}
+          {selectedExercise && (
+              <div>
+                <button type="submit">Submit</button>
+              </div>
+          )}
+        </form>
+        <div className="return-button-container">
+          <button className="return-button" onClick={handleReturnClick}>
+            Return
+          </button>
+        </div>
       </div>
-      {exerciseType && (
-        <div>
-          <label>
-            Choose Exercise:
-            <select value={selectedExercise} onChange={handleExerciseChange}>
-              <option value="">Select...</option>
-              {(exerciseType === 'time' ? timeExercises : repExercises).map((exercise) => (
-                <option key={exercise.id_exercise} value={exercise.id_exercise}>
-                  {exercise.exercise_name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
-      {selectedExercise && (
-        <div>
-          <label>
-            {exerciseType === 'time' ? 'Time (minutes):' : 'Repetitions:'}
-            <input
-              type="number"
-              value={inputValue}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-        </div>
-      )}
-      {selectedExercise && (
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      )}
-    </form>
   );
 };
 

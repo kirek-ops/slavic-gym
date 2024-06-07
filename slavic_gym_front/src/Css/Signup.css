@@ -1,0 +1,34 @@
+/* SignupPage.css */
+
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.signup-label {
+    margin-bottom: 10px;
+}
+
+.signup-input {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.signup-error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.signup-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

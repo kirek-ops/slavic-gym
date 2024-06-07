@@ -9,6 +9,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import MMM.demo.Utils.EmailValidator;
+import MMM.demo.Utils.PhoneValidator;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -46,6 +49,14 @@ public class AuthResource {
         GymMember user = new GymMember();
 
         log.info("Received request to create new user: {}", body.toString());
+
+        if (!EmailValidator.isValidEmail((String) body.get("email"))) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid email"));
+        }
+
+        if (!PhoneValidator.isValidPhone((String) body.get("phone"))) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid phone number"));
+        }
 
         user.setEmail((String) body.get("email"));
         user.setFirst_name((String) body.get("firstName"));

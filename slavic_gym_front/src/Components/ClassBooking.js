@@ -1,11 +1,12 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../Css/ClassSubmition.css'; // Import CSS file
 import '../Css/ClassesList.css';
 
 const ClassBooking = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Import useNavigate
   const { id, gyms } = location.state;
 
   console.log(id, gyms);
@@ -51,10 +52,9 @@ const ClassBooking = () => {
     }
 
     return `${year}-${month}-${day}`;
-  }
+  };
 
   const handleSubmit = async () => {
-
     const form = {
       id_gym: parseInt(selectedGym),
       time_from: parseDate(new Date(startTime)),
@@ -69,16 +69,15 @@ const ClassBooking = () => {
       console.log("Response for classes: ", response.data);
 
       setAvailableClasses(response.data);
-
     } catch (error) {
       alert("Set the correct date");
       return;
     }
-  }
+  };
 
   useEffect(() => {
     console.log(availableClasses);
-  })
+  }, [availableClasses]);
 
   const handleBook = async (id_class) => {
     try {
@@ -86,13 +85,17 @@ const ClassBooking = () => {
       const data = { id_class: id_class };
       await axios.post(`http://localhost:8080/booking/book/${id}`, data);
 
-      alert("Succesfully booked the class");
+      alert("Successfully booked the class");
     } catch (error) {
       console.log(error);
       alert(error.response.data);
       return;
     }
-  }
+  };
+
+  const handleReturnClick = () => {
+    navigate('/interface', { state: { id: id } });
+  };
 
   const ClassItem = ({ classInfo }) => {
     const handleClick = () => {
@@ -100,73 +103,77 @@ const ClassBooking = () => {
     };
 
     return (
-
-      <div className="class-item">
-        <div className="class-content">
-          <div className="class-info">
-            <h3 className="class-name">{classInfo.class_name}</h3>
-            <p className="class-time">{classInfo.time_from} - {classInfo.time_till}</p>
-            <div className="class-details">
-              <p><strong>Trainer:</strong> {classInfo.trainer}</p>
-              <p><strong>Day:</strong> {classInfo.schedule}</p>
-              <p><strong>Currently enrolled:</strong> {classInfo.filled} / {classInfo.capacity}</p>
+        <div className="class-item">
+          <div className="class-content">
+            <div className="class-info">
+              <h3 className="class-name">{classInfo.class_name}</h3>
+              <p className="class-time">{classInfo.time_from} - {classInfo.time_till}</p>
+              <div className="class-details">
+                <p><strong>Trainer:</strong> {classInfo.trainer}</p>
+                <p><strong>Day:</strong> {classInfo.schedule}</p>
+                <p><strong>Currently enrolled:</strong> {classInfo.filled} / {classInfo.capacity}</p>
+              </div>
             </div>
+            <button className="book-button" onClick={handleClick}>Book</button>
           </div>
-          <button className="book-button" onClick={handleClick}>Book</button>
         </div>
-      </div>
     );
   };
-  
 
   return (
-    <div className="chooser">
-      <div className="interface-container">
-        <div className="select-container">
+      <div className="chooser">
+        <div className="interface-container">
+          <div className="select-container">
             <label htmlFor="gym-select" className="label">Choose a gym:</label>
             <select id="gym-select" value={selectedGym} onChange={handleGymChange} className="select">
               <option value="">Select a gym</option>
               {Array.isArray(gyms) && gyms.map((gym, index) => (
-                <option key={index} value={gym.id_gym}>
-                  {gym.name}
-                </option>
+                  <option key={index} value={gym.id_gym}>
+                    {gym.name}
+                  </option>
               ))}
             </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="start-time" className="label">Start Time:</label>
+            <input
+                type="date"
+                id="start-time"
+                value={startTime}
+                onChange={handleStartTimeChange}
+                className="input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="end-time" className="label">End Time:</label>
+            <input
+                type="date"
+                id="end-time"
+                value={endTime}
+                onChange={handleEndTimeChange}
+                className="input"
+            />
+          </div>
+
+          <button className="button" onClick={handleSubmit}>Find classes</button>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="start-time" className="label">Start Time:</label>
-          <input
-            type="date"
-            id="start-time"
-            value={startTime}
-            onChange={handleStartTimeChange}
-            className="input"
-          />
+        <div className="interface-container">
+          <div className="class-grid">
+            {availableClasses && availableClasses.map((classInfo, index) => (
+                <ClassItem key={index} classInfo={classInfo} />
+            ))}
+          </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="end-time" className="label">End Time:</label>
-          <input
-            type="date"
-            id="end-time"
-            value={endTime}
-            onChange={handleEndTimeChange}
-            className="input"
-          />
+        <div className="return-button-container">
+          <button className="return-button" onClick={handleReturnClick}>
+            Return
+          </button>
         </div>
-
-        <button onClick = {handleSubmit}>Find classes</button>
       </div>
-
-      <div className="interface-container">
-        <div className="class-grid">
-          {availableClasses && availableClasses.map((classInfo, index) => (
-            <ClassItem key={index} classInfo={classInfo} />
-          ))}
-        </div>
-      </div>
-    </div>
   );
 };
 

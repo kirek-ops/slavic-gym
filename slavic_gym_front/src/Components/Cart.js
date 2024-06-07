@@ -111,7 +111,7 @@ const Cart = () => {
                                 className="cart-item-image"
                             />
                             <div className="item-details">
-                            <div className="item-info">
+                                <div className="item-info">
                                     <h2>{item.item_name}</h2>
                                     <p>Price: ${item.price ? item.price.toFixed(2) : '0.00'}</p>
                                 </div>

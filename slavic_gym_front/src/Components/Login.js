@@ -25,6 +25,7 @@ const Login = () => {
                     return;
                 }
                 alert('Login successful');
+                localStorage.setItem('email', email);
                 navigate('/interface', { state: { id: id, email: email } });
             } else {
                 alert(response.data.message || 'Incorrect email or password');

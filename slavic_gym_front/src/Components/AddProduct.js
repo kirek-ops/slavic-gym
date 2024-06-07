@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Css/AddProduct.css'; // Import CSS file
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { id, hasPosition, gym } = location.state;
 
     console.log(id, hasPosition, gym);
@@ -80,6 +81,10 @@ const AddProduct = () => {
 
     console.log(categories);
 
+    const handleReturnClick = () => {
+        navigate('/interface', { state: { id } });
+    }
+
     return (
         <div className="add-product-container">
             <h2>Add Product</h2>
@@ -97,19 +102,23 @@ const AddProduct = () => {
                     <>
                         <div className="form-group">
                             <label htmlFor="product_name">Product Name</label>
-                            <input type="text" name="product_name" id="product_name" value={formData.product_name} onChange={handleChange} />
+                            <input type="text" name="product_name" id="product_name" value={formData.product_name}
+                                   onChange={handleChange}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="price">Price</label>
-                            <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} />
+                            <input type="number" name="price" id="price" value={formData.price}
+                                   onChange={handleChange}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="quantity">Quantity</label>
-                            <input type="number" name="quantity" id="quantity" value={formData.quantity} onChange={handleChange} />
+                            <input type="number" name="quantity" id="quantity" value={formData.quantity}
+                                   onChange={handleChange}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="id_category">Category</label>
-                            <select name="id_category" id="id_category" value={formData.id_category} onChange={handleChange}>
+                            <select name="id_category" id="id_category" value={formData.id_category}
+                                    onChange={handleChange}>
                                 <option value="">Select Category</option>
                                 {categories.map((category) => (
                                     <option key={category.category_id} value={category.category_id}>
@@ -120,12 +129,13 @@ const AddProduct = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="image">Product Image</label>
-                            <input type="file" name="image" id="image" onChange={handleFileChange} />
+                            <input type="file" name="image" id="image" onChange={handleFileChange}/>
                         </div>
                         <button type="submit">Submit</button>
                     </>
                 )}
             </form>
+            <button onClick={handleReturnClick} className="return-button">Return</button>
         </div>
     );
 };

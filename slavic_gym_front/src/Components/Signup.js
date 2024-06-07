@@ -67,6 +67,7 @@ const SignupPage = () => {
             const response = await axios.post('http://localhost:8080/auth/signup', requestBody);
             console.log('Signup response:', response.data);
             setId(response.data.id);
+            localStorage.setItem('email', email);
             navigate('/interface', { state: { id: response.data.id, email: email } });
         } catch (error) {
             console.error('Error signing up:', error);

@@ -77,6 +77,14 @@ CREATE TABLE inventory (
     FOREIGN KEY (id_gym) REFERENCES gyms(id_gym)
 );
 
+CREATE TABLE image_item (
+    id_item INT,
+    id_image INT NOT NULL,
+    PRIMARY KEY (id_item),
+    FOREIGN KEY (id_item) REFERENCES inventory(id_item)
+);
+
+
 CREATE TABLE products_categories (
     id_item INT,
     id_category INT,

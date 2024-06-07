@@ -191,6 +191,7 @@ DECLARE
         2, 3, 5, 6, 4, 6, 8, 5, 10, 3, 4, 4, 8, 2, 1, 2, 1, 8, 4, 4, 6, 6, 7, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8
         ];
     product_name TEXT;
+    product_id INTEGER;
     category_id INTEGER;
     quantity INTEGER;
     gym_id INTEGER;
@@ -198,7 +199,8 @@ DECLARE
 BEGIN
     FOR i IN 1..100 LOOP
             -- Choose a random item from the products array
-            product_name := products[FLOOR(RANDOM() * ARRAY_LENGTH(products, 1) + 1)];
+            product_id := FLOOR(RANDOM() * ARRAY_LENGTH(products, 1) + 1);
+            product_name := products[product_id];
             category_id := categories[ARRAY_POSITION(products, product_name)];
 
             quantity := 10 + (i % 20); -- Random quantity between 10 and 29
@@ -213,6 +215,9 @@ BEGIN
                 -- Assign the category to the item
                 INSERT INTO products_categories (id_item, id_category)
                 VALUES (i, category_id);
+
+                INSERT into image_item(id_item, id_image)
+                VALUES (i, product_id);
 
             EXCEPTION
                 WHEN unique_violation THEN

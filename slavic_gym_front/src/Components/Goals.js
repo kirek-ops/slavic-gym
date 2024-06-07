@@ -17,6 +17,7 @@ const Goals = () => {
   const [inputValue, setInputValue] = useState('');
   const [goals, setGoals] = useState([]);
   const [selectedGoal, setSelectedGoal] = useState(null);
+  const [uniqueGoals, setUniqueGoals] = useState([]);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -35,6 +36,15 @@ const Goals = () => {
       try {
         const response = await axios.get(`http://localhost:8080/goals/get-goals/${id}`);
         setGoals(response.data);
+        const uniqueGoalNamesArray = response.data.reduce((acc, current) => {
+          if (!acc.includes(current.exercise_name)) {
+            return acc.concat(current.exercise_name);
+          } else {
+            return acc;
+          }
+        }, []);
+        setUniqueGoals(uniqueGoalNamesArray);
+        console.log(uniqueGoalNamesArray);
       } catch (error) {
         console.error('Error fetching goals:', error);
       }
@@ -54,8 +64,8 @@ const Goals = () => {
   };
 
   const handleGoalChange = (e) => {
-    const selectedGoal = goals.find(goal => goal.exercise_name === e.target.value);
-    setSelectedGoal(selectedGoal);
+    const selectedGoals = goals.filter(goal => goal.exercise_name === e.target.value);
+    setSelectedGoal(selectedGoals);
   };
 
   const handleInputChange = (e) => {
@@ -138,21 +148,21 @@ const Goals = () => {
             Choose Goal to View Description:
             <select onChange={handleGoalChange}>
               <option value="">Select...</option>
-              {goals.map((goal, index) => (
-                  <option key={index} value={goal.exercise_name}>
-                    {goal.exercise_name}
+              {uniqueGoals.map((goal, index) => (
+                  <option key={index} value={goal}>
+                    {goal}
                   </option>
               ))}
             </select>
           </label>
-          {selectedGoal && (
-              <div className="goal-description">
-                <h3>{selectedGoal.exercise_name}</h3>
-                <p>{selectedGoal.description}</p>
-                <p>Target: {selectedGoal.target}</p>
-                <p>Completion: {selectedGoal.completion ? selectedGoal.completion : 'Incomplete'}</p>
+          {Array.isArray(selectedGoal) && selectedGoal.map((goal, index) => (
+              <div className="goal-description" key={index}>
+                <h3>{goal.exercise_name}</h3>
+                <p>{goal.description}</p>
+                <p>Target: {goal.target}</p>
+                <p>Completion: {goal.completion ? goal.completion : 'Incomplete'}</p>
               </div>
-          )}
+          ))}
         </div>
         <div className="return-button-container">
           <button className="return-button" onClick={handleReturnClick}>

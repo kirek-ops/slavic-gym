@@ -2,6 +2,7 @@
 package MMM.demo.Daos;
 
 import MMM.demo.Entities.ExerciseLogsTime;
+import MMM.demo.Entities.ExerciseLogTime;
 import MMM.demo.Repositories.ExerciseLogsTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,6 +49,27 @@ public class ExerciseLogsTimeDaoImpl implements ExerciseLogsTimeRepository {
             Types.INTEGER
         };
         return jdbcTemplate.update(sql, params, types);
+    }
+
+    public List <ExerciseLogTime> getLogsByIdWithName(Integer id) {
+        String sql = "SELECT elt.*, te.exercise_name FROM " +
+                    "exercise_logs_time elt JOIN time_exercises te ON te.id_exercise = elt.id_exercise " +
+                    "WHERE elt.id_member = ?";
+        return jdbcTemplate.query(sql, new Object[]{id}, new ExerciseLogTimeRowMapper());
+    }
+
+    private static class ExerciseLogTimeRowMapper implements RowMapper<ExerciseLogTime> {
+        @Override
+        public ExerciseLogTime mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ExerciseLogTime result = new ExerciseLogTime();
+            result.setId_log(rs.getInt("id_log"));
+            result.setId_member(rs.getInt("id_member"));
+            result.setId_exercise(rs.getInt("id_exercise"));
+            result.setLog_date(rs.getDate("log_date").toLocalDate());
+            result.setMinutes_done(rs.getInt("minutes_done"));
+            result.setExercise_name(rs.getString("exercise_name"));
+            return result;
+        }
     }
 
     private static class ExerciseLogsTimeRowMapper implements RowMapper<ExerciseLogsTime> {

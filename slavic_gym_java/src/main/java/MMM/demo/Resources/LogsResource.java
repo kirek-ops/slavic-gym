@@ -1,5 +1,6 @@
 package MMM.demo.Resources;
 
+import MMM.demo.Entities.*;
 import MMM.demo.Daos.ExerciseLogsRepetitionDaoImpl;
 import MMM.demo.Daos.ExerciseLogsTimeDaoImpl;
 import MMM.demo.Entities.RepetitionExercise;
@@ -20,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.*;
 import MMM.demo.Utils.LocationFetcher;
 import MMM.demo.Utils.UuidGenerator;
+
+import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -87,6 +91,31 @@ public class LogsResource {
       }
     }
     return null;
+  }
+
+  @GetMapping("/get-logs/{id}")
+  public ResponseEntity < Map < String, List <ExerciseLog> > > getLogsById(@PathVariable Integer id) {
+    List <ExerciseLogTime> listTime = exerciseLogsTimeDaoImpl.getLogsByIdWithName(id);
+    List <ExerciseLogRep> listReps = exerciseLogsRepetitionDaoImpl.getLogsByIdWithName(id);
+    List <ExerciseLog> mergedList = new ArrayList <> ();
+    mergedList.addAll(listTime.stream().map(ExerciseLog::of).collect(Collectors.toList()));
+    mergedList.addAll(listReps.stream().map(ExerciseLog::of).collect(Collectors.toList()));
+    return ResponseEntity.ok(
+      mergedList.stream()
+        .collect(Collectors.groupingBy(ExerciseLog::getExercise_name))
+        .entrySet().stream()
+        .collect(Collectors.toMap(
+          Map.Entry::getKey,
+          entry -> entry.getValue().stream()
+            .collect(Collectors.toMap(
+              ExerciseLog::getLog_date,
+              log -> log,
+              (log1, log2) -> log1.getDone() >= log2.getDone() ? log1 : log2
+            ))
+            .values().stream()
+            .sorted(Comparator.comparing(ExerciseLog::getLog_date))
+            .collect(Collectors.toList())
+    )));
   }
 
 }

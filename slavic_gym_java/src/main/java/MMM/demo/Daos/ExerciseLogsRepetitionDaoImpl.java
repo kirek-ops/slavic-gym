@@ -2,6 +2,7 @@
 package MMM.demo.Daos;
 
 import MMM.demo.Entities.ExerciseLogsRepetition;
+import MMM.demo.Entities.ExerciseLogRep;
 import MMM.demo.Repositories.ExerciseLogsRepetitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,6 +48,27 @@ public class ExerciseLogsRepetitionDaoImpl implements ExerciseLogsRepetitionRepo
             Types.INTEGER
         };
         return jdbcTemplate.update(sql, params, types);
+    }
+
+    public List <ExerciseLogRep> getLogsByIdWithName(Integer id) {
+        String sql = "SELECT elr.*, re.exercise_name FROM " +
+                    "exercise_logs_repetitions elr JOIN repetition_exercises re ON re.id_exercise = elr.id_exercise " +
+                    "WHERE elr.id_member = ?";
+        return jdbcTemplate.query(sql, new Object[]{id}, new ExerciseLogRepRowMapper());
+    }
+
+    private static class ExerciseLogRepRowMapper implements RowMapper<ExerciseLogRep> {
+        @Override
+        public ExerciseLogRep mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ExerciseLogRep result = new ExerciseLogRep();
+            result.setId_log(rs.getInt("id_log"));
+            result.setId_member(rs.getInt("id_member"));
+            result.setId_exercise(rs.getInt("id_exercise"));
+            result.setLog_date(rs.getDate("log_date").toLocalDate());
+            result.setReps_done(rs.getInt("reps_done"));
+            result.setExercise_name(rs.getString("exercise_name"));
+            return result;
+        }
     }
 
     private static class ExerciseLogsRepetitionRowMapper implements RowMapper<ExerciseLogsRepetition> {

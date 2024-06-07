@@ -65,9 +65,7 @@ CREATE TABLE bookings (
 
 CREATE TABLE categories (
     id_category INT PRIMARY KEY,
-    category_name VARCHAR(100) NOT NULL,
-    parent_category_id INT,
-    FOREIGN KEY (parent_category_id) REFERENCES categories(id_category)
+    category_name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE inventory (
@@ -152,7 +150,7 @@ CREATE TABLE repetition_goals (
     id_goal INT PRIMARY KEY,
     id_member INT,
     id_exercise INT,
-    target_reps INT NOT NULL,
+    reps_target INT NOT NULL,
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
     FOREIGN KEY (id_exercise) REFERENCES repetition_exercises(id_exercise)
 );
@@ -161,10 +159,11 @@ CREATE TABLE time_goals (
     id_goal INT PRIMARY KEY,
     id_member INT,
     id_exercise INT,
-    target_time INTERVAL NOT NULL,
+    minutes_target INT NOT NULL,
     FOREIGN KEY (id_member) REFERENCES gym_members(id_member),
     FOREIGN KEY (id_exercise) REFERENCES time_exercises(id_exercise)
 );
+
 
 CREATE TABLE exercise_logs_repetitions (
     id_log INT PRIMARY KEY,

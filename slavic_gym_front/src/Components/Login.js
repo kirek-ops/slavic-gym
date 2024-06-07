@@ -19,22 +19,21 @@ const Login = () => {
             const response = await axios.post(`http://localhost:8080/auth/login?email=${email}`);
             if (response.data.success) {
                 const { id, correctPassword } = response.data;
-                if (!await bcrypt.compare(password, correctPassword)) {
-                    alert('Incorrect login or password');
+                const isPasswordCorrect = await bcrypt.compare(password, correctPassword);
+                if (!isPasswordCorrect) {
+                    alert('Incorrect email or password');
                     return;
                 }
                 alert('Login successful');
                 navigate('/interface', { state: { id: id, email: email } });
-            }
-            else {
-                alert('Incorrect login or password');
-                return;
+            } else {
+                alert(response.data.message || 'Incorrect email or password');
             }
         } catch (error) {
             alert('Something went wrong on server...');
             console.error(error);
         }
-    }
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>

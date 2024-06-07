@@ -13,10 +13,12 @@ DB_NAME=slavic_gym
 DB_USER="${DB_USER}"
 
 # SQL files
-SQL_FILES=("clear.sql" "sequences.sql" "create.sql" "insert_samples.sql"
-          "create_triggers.sql" "create_constraints.sql" "create_functions.sql")
+SQL_FILES=("clear.sql" "sequences.sql" "create.sql"
+          "create_triggers.sql" "create_constraints.sql"
+          "create_functions.sql" "scripts_for_adding_data.sql")
 
 # Execute each SQL file
+
 for sql_file in "${SQL_FILES[@]}"; do
     if [[ -f "$sql_file" ]]; then
         echo "Executing $sql_file..."

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import MMM.demo.Utils.LocationFetcher;
 import MMM.demo.Utils.UuidGenerator;
+import MMM.demo.Utils.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -61,7 +62,7 @@ public class GoalsResource {
         timeGoalDaoImpl.insertGoal(curGoal);
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }
     else {
@@ -84,7 +85,7 @@ public class GoalsResource {
         repetitionGoalDaoImpl.insertGoal(curGoal);
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }
     return null;

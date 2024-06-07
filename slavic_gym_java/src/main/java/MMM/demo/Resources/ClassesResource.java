@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import MMM.demo.Utils.LocationFetcher;
 import MMM.demo.Utils.UuidGenerator;
+import MMM.demo.Utils.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -81,7 +82,7 @@ public class ClassesResource {
         return ResponseEntity.ok("Successfully added class");
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.ok(e.getMessage());
+        return ResponseEntity.ok(ErrorCutter.cut(e.getMessage()));
       }
     }
 }

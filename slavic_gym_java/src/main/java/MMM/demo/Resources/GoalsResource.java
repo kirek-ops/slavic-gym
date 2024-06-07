@@ -1,4 +1,5 @@
 package MMM.demo.Resources;
+import MMM.demo.Entities.*;
 
 import MMM.demo.Daos.TimeGoalDaoImpl;
 import MMM.demo.Daos.RepetitionGoalDaoImpl;
@@ -26,6 +27,8 @@ import MMM.demo.Utils.UuidGenerator;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.sql.SQLException;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/goals")
@@ -87,4 +90,14 @@ public class GoalsResource {
     return null;
   }
 
+  @GetMapping("get-goals/{id}")
+  public List <GoalWithCompleted> getGoalsId(@PathVariable Integer id) {
+    List <TimeGoalWithCompleted> listTime = timeGoalDaoImpl.getByIdWithCompletionAndName(id);
+    List <RepGoalWithCompleted> listReps = repetitionGoalDaoImpl.getByIdWithCompletionAndName(id);
+    List <GoalWithCompleted> mergedList = new ArrayList <> ();
+    mergedList.addAll(listTime.stream().map(GoalWithCompleted::of).collect(Collectors.toList()));
+    mergedList.addAll(listReps.stream().map(GoalWithCompleted::of).collect(Collectors.toList()));
+    mergedList.sort((g1, g2) -> g1.getExercise_name().compareTo(g2.getExercise_name()));
+    return mergedList;
+  }
 }

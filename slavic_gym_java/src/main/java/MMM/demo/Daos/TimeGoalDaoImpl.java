@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
+import java.time.LocalDate;
+import MMM.demo.Entities.*;
+
 import java.time.Duration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,6 +48,29 @@ public class TimeGoalDaoImpl implements TimeGoalRepository {
             Types.INTEGER
         };
         return jdbcTemplate.update(sql, params, types);
+    }
+
+    public List <TimeGoalWithCompleted> getByIdWithCompletionAndName(Integer id) {
+        String sql = "SELECT tg.*, te.exercise_name, get_first_date_when_goal_reached_time(tg.id_goal) AS date_reach " +
+                    "FROM time_goals tg " +
+                    "JOIN time_exercises te ON te.id_exercise = tg.id_exercise " +
+                    "WHERE tg.id_member = ?";
+        return jdbcTemplate.query(sql, new Object[]{id}, new TimeGoalWithCompletedRowMapper());
+    }
+
+    private static class TimeGoalWithCompletedRowMapper implements RowMapper<TimeGoalWithCompleted> {
+        @Override
+        public TimeGoalWithCompleted mapRow(ResultSet rs, int rowNum) throws SQLException {
+            TimeGoalWithCompleted result = new TimeGoalWithCompleted();
+            result.setId_goal(rs.getInt("id_goal"));
+            result.setId_member(rs.getInt("id_member"));
+            result.setId_exercise(rs.getInt("id_exercise"));
+            result.setMinutes_target(rs.getInt("minutes_target"));
+            result.setName_exercise(rs.getString("exercise_name"));
+            var date_reach = rs.getDate("date_reach");
+            result.setCompletion_date(date_reach == null ? null : date_reach.toLocalDate());
+            return result;
+        }
     }
 
     private static class TimeGoalRowMapper implements RowMapper<TimeGoal> {

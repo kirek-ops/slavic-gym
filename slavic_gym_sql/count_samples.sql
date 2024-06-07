@@ -1,0 +1,1 @@
+SELECT 'gyms count: ', count(*) from gyms;

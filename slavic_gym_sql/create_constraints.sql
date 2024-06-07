@@ -17,3 +17,12 @@ ALTER TABLE memberships
 ALTER TABLE classes
     ADD CONSTRAINT check_class_schedule_future
         CHECK (schedule > CURRENT_DATE OR (schedule = CURRENT_DATE AND time_from > CURRENT_TIME));
+
+ALTER TABLE gym_members
+    ADD CONSTRAINT unique_phone_number
+        UNIQUE (phone_number);
+
+
+ALTER TABLE inventory
+    ADD CONSTRAINT unique_item_per_gym
+        UNIQUE (id_gym, item_name);

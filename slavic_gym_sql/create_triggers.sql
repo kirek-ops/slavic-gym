@@ -204,23 +204,41 @@ EXECUTE FUNCTION check_member_not_instructor();
 
 
 -- Create a function to check for booking conflicts(i.e. overlapping bookings)
-CREATE OR REPLACE FUNCTION check_booking_conflict() RETURNS TRIGGER AS $$
+-- Step 1: Create the trigger function
+CREATE OR REPLACE FUNCTION check_overlapping_bookings()
+    RETURNS TRIGGER AS $$
+DECLARE
+    schedule_of_class DATE;
+    time_from_of_class TIME;
+    time_till_of_class TIME;
 BEGIN
+    -- Retrieve the schedule, time_from, and time_till of the class being booked
+    SELECT c.schedule, c.time_from, c.time_till
+    INTO schedule_of_class, time_from_of_class, time_till_of_class
+    FROM classes c
+    WHERE c.id_class = NEW.id_class;
+
+    -- Check if there is any overlapping booking for the same member
     IF EXISTS (
         SELECT 1
         FROM bookings b
+                 JOIN classes c ON b.id_class = c.id_class
         WHERE b.id_member = NEW.id_member
-          AND (NEW.schedule, NEW.schedule + NEW.time_till - NEW.time_from)
-            OVERLAPS (b.schedule, b.schedule + b.time_till - b.time_from)
+          AND c.schedule = schedule_of_class
+          AND (
+            (time_from_of_class < c.time_till AND time_till_of_class > c.time_from) OR
+            (c.time_from < time_till_of_class AND c.time_till > time_from_of_class)
+            )
     ) THEN
-        RAISE EXCEPTION 'Intersecting booking detected';
+        RAISE EXCEPTION 'Booking schedule overlaps with another class for the same member';
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER prevent_booking_conflict
+-- Step 2: Create the trigger
+CREATE TRIGGER check_overlapping_bookings_trigger
     BEFORE INSERT ON bookings
     FOR EACH ROW
-EXECUTE FUNCTION check_booking_conflict();
-
+EXECUTE FUNCTION check_overlapping_bookings();

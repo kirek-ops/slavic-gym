@@ -42,7 +42,7 @@ public class GoalsResource {
       TimeGoal curGoal = new TimeGoal();
 
       try {
-        curGoal.setId_goal(new UuidGenerator("id_goals_time").generateUniqueID());
+        curGoal.setId_goal(new UuidGenerator("id_time_goal").generateUniqueID());
       } catch (Exception e) {
         log.info("Error while generating id for goal. Aborting");
         return ResponseEntity.badRequest().body("Error while generating id");
@@ -65,7 +65,7 @@ public class GoalsResource {
       RepetitionGoal curGoal = new RepetitionGoal();
 
       try {
-        curGoal.setId_goal(new UuidGenerator("id_goals_reps").generateUniqueID());
+        curGoal.setId_goal(new UuidGenerator("id_rep_goal").generateUniqueID());
       } catch (Exception e) {
         log.info("Error while generating id for log. Aborting");
         return ResponseEntity.badRequest().body("Error while generating id");

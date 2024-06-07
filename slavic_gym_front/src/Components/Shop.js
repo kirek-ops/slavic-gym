@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Css/Shop.css';
-import cartIcon from '../ImagesForShop/cart.png';
+import cartIcon from '../images/cart.png';
 
 const Shop = () => {
     const location = useLocation();
@@ -15,6 +15,8 @@ const Shop = () => {
     const [categories, setCategories] = useState({});
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [filteredInventory, setFilteredInventory] = useState([]);
+    const [bytesImages, setBytesImages] = useState([]);
+    const [imageUrls, setImageUrls] = useState({});
 
     const intGym = parseInt(gym);
 
@@ -33,15 +35,15 @@ const Shop = () => {
         const getInventory = async () => {
             try {
                 const response = await axios.post('http://localhost:8080/shop/getallbyid', { intGym });
-                if (Array.isArray(response.data)) {
-                    setInventory(response.data);
-                    setFilteredInventory(response.data);
-                    const itemIds = response.data.map(item => item.id_item);
-                    getCategories(itemIds);
-                } else {
-                    console.error('Inventory response is not an array:', response.data);
-                    alert('Something went wrong while fetching inventory');
-                }
+                const items = Object.values(response.data);
+                setInventory(items);
+                setFilteredInventory(items);
+                getCategories(items.map(item => item.id_item));
+
+                setBytesImages(items.map(item => ({
+                    id: item.id_item,
+                    image: item.image
+                })));
             } catch (error) {
                 console.error('Error fetching inventory:', error);
                 alert('Something went wrong');
@@ -50,6 +52,30 @@ const Shop = () => {
 
         getInventory();
     }, [intGym]);
+
+    useEffect(() => {
+        console.log('Bytes images:', bytesImages);
+        const decodeImages = () => {
+            const urls = {};
+            bytesImages.forEach((item) => {
+                try {
+                    const binaryString = atob(item.image);
+                    const imageData = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        imageData[i] = binaryString.charCodeAt(i);
+                    }
+                    const blob = new Blob([imageData], { type: 'image/png' });
+                    const url = URL.createObjectURL(blob);
+                    urls[item.id] = url;
+                } catch (error) {
+                    console.error('Error decoding image:', error);
+                    console.log('Invalid base64 string:', item.image);
+                }
+            });
+            setImageUrls(urls);
+        };
+        decodeImages();
+    }, [bytesImages]);
 
     useEffect(() => {
         const storedQuantities = localStorage.getItem('cartQuantities');
@@ -125,7 +151,13 @@ const Shop = () => {
             acc[item.id_item] = item.item_name;
             return acc;
         }, {});
-        navigate('/cart', { state: { id, gym, cartItems, maxQuantities, itemNames } });
+
+        const cartItemsWithImages = cartItems.map(item => ({
+            ...item,
+            imageUrl: imageUrls[item.id_item]
+        }));
+
+        navigate('/cart', { state: { id, gym, cartItems: cartItemsWithImages, maxQuantities, itemNames } });
     };
 
     const handleCategoryChange = (e) => {
@@ -162,7 +194,7 @@ const Shop = () => {
                     filteredInventory.map(item => (
                         <div className="inventory-item" key={item.id_item}>
                             <img
-                                src={require(`../ImagesForShop/${item.id_item}.png`)}
+                                src={imageUrls[item.id_item]} // Use the decoded image URL here
                                 alt={item.item_name}
                                 className="inventory-item-image"
                                 style={{filter: item.quantity > 0 ? 'none' : 'grayscale(100%)'}}
@@ -175,7 +207,9 @@ const Shop = () => {
                                         <span>{quantities[item.id_item] || 0}</span>
                                         <button onClick={() => incrementQuantity(item.id_item)}>+</button>
                                     </div>
-                                    <button className="buy-button" onClick={() => handleAddingToCart(item.id_item)}>Add to Cart</button>
+                                    <button className="buy-button" onClick={() => handleAddingToCart(item.id_item)}>Add
+                                        to Cart
+                                    </button>
                                 </React.Fragment>
                             ) : (
                                 <p>Product is expired</p>

@@ -14,12 +14,10 @@ const Cart = () => {
     const [quantities, setQuantities] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
 
-
     console.log('Cart Items', cartItems);
     console.log('Max Quantities', maxQuantities);
 
     useEffect(() => {
-        console.log('LOLOLOLOLOLOLOLOLOLOL');
         // Initialize quantities and calculate initial total price
         let initialQuantities = {};
         let initialTotalPrice = 0;
@@ -71,7 +69,7 @@ const Cart = () => {
 
     const handleBackToShop = () => {
         const storedQuantities = localStorage.getItem('cartQuantities');
-        navigate('/shop', { state: { id: id, gym: gym, returnedCartItems: storedQuantities } } );
+        navigate('/shop', { state: { id: id, gym: gym, returnedCartItems: storedQuantities } });
     };
 
     const handleBuy = async () => {
@@ -90,11 +88,10 @@ const Cart = () => {
             alert('Thank you for your purchase!');
             localStorage.clear();
             navigate('/shop', { state: { id: id, gym: gym, cartItems: [] } });
-        }
-        else {
+        } else {
             const name = itemNames[response.data.erroredItem];
 
-            const responseForErroredItem = await axios.post('http://localhost:8080/shop/getbyiditem', { "itemId": response.data.erroredItem, "gymId": parseInt(gym) });
+            const responseForErroredItem = await axios.post('http://localhost:8080/shop/getbyiditem', { itemId: response.data.erroredItem, gymId: parseInt(gym) });
             console.log(responseForErroredItem);
 
             alert(`Something went wrong with your purchase. We have only ${responseForErroredItem.data.quantity} ${name} left in stock. Please try again.`);
@@ -109,12 +106,12 @@ const Cart = () => {
                     cartItems.map(item => (
                         <div className="cart-item" key={item.id_item}>
                             <img
-                                src={require(`../ImagesForShop/${item.id_item}.png`)}
+                                src={item.imageUrl}
                                 alt={item.item_name}
                                 className="cart-item-image"
                             />
                             <div className="item-details">
-                                <div className="item-info">
+                            <div className="item-info">
                                     <h2>{item.item_name}</h2>
                                     <p>Price: ${item.price ? item.price.toFixed(2) : '0.00'}</p>
                                 </div>

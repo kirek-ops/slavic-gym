@@ -72,13 +72,6 @@ INSERT INTO products_categories (id_item, id_category) VALUES
                                                            (6, 1),
                                                            (5, 1);
 
--- Insert transaction inventory
-INSERT INTO transactions_inventory (id_transaction, id_item, id_member, order_time, quantity) VALUES
-                                                                                                  (1, 1, 1, '2024-06-01 10:00:00', 2),
-                                                                                                  (2, 2, 2, '2024-06-02 11:30:00', 1),
-                                                                                                  (3, 3, 1, '2024-06-03 12:00:00', 3),
-                                                                                                  (4, 4, 3, '2024-06-04 14:45:00', 1);
-
 -- Insert classes ensuring that only trainers and managers are assigned as instructors
 INSERT INTO classes (id_class, class_name, schedule, time_from, time_till, id_gym, capacity, id_instructor)
 VALUES

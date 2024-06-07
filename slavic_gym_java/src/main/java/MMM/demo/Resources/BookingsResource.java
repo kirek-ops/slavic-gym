@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import MMM.demo.Utils.LocationFetcher;
 import MMM.demo.Utils.UuidGenerator;
+import MMM.demo.Utils.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -69,7 +70,7 @@ public class BookingsResource {
         return ResponseEntity.ok("Succesfully booked the class");
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }
 

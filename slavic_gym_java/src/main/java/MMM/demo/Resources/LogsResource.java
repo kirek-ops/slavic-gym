@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.*;
 import MMM.demo.Utils.LocationFetcher;
 import MMM.demo.Utils.UuidGenerator;
+import MMM.demo.Utils.*;
 
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class LogsResource {
         exerciseLogsTimeDaoImpl.insertLog(curLog);
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }
     else {
@@ -87,7 +88,7 @@ public class LogsResource {
         exerciseLogsRepetitionDaoImpl.insertLog(curLog);
       } catch (Exception e) {
         log.info(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }
     return null;

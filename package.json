@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "chart.js": "^4.4.3",
+    "chartjs": "^0.3.24",
+    "react-chartjs-2": "^5.2.0"
+  }
+}

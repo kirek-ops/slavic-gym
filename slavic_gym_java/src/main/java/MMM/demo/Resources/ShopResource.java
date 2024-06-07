@@ -1,6 +1,7 @@
 package MMM.demo.Resources;
 
 import MMM.demo.Daos.CategorieDaoImpl;
+import MMM.demo.Daos.ImagesDaoImpl;
 import MMM.demo.Daos.InventoryDaoImpl;
 import MMM.demo.Daos.TransactionsInventoryDaoImpl;
 import MMM.demo.Entities.Categorie;
@@ -36,6 +37,7 @@ import org.springframework.core.io.Resource;
 public class ShopResource {
     private final InventoryDaoImpl inventoryDao;
     private final TransactionsInventoryDaoImpl transactionsInventoryDao;
+    private final ImagesDaoImpl imagesDao;
     private final CategorieDaoImpl categorieDao;
 
     @PostMapping("/getallbyid")
@@ -49,9 +51,11 @@ public class ShopResource {
             itemMap.put("quantity", item.getQuantity());
             itemMap.put("price", item.getPrice());
             itemMap.put("id_gym", item.getId_gym());
-
+            Integer id_image = imagesDao.findImageIdByItemId(item.getId_item());
+            log.info("Image id " + id_image);
             try {
-                byte[] bytes = Files.readAllBytes(Paths.get("src/main/resources/static/images/" + item.getId_item() + ".png"));
+                byte[] bytes = Files.readAllBytes(Paths.get("slavic_gym_java/src/main/resources/static/images/" +
+                        id_image.toString() + ".png"));
                 itemMap.put("image", bytes);
             } catch (Exception e) {
                 log.error("Error loading image for item " + item.getId_item());

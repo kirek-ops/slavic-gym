@@ -13,6 +13,8 @@ import ClassBooking from './Components/ClassBooking';
 import Shop from "./Components/Shop";
 import Cart from "./Components/Cart";
 import ProgressLogger from "./Components/ProgressLogger";
+import AddProduct from "./Components/AddProduct";
+import Goals from "./Components/Goals";
 
 function App() {
     return (

@@ -70,6 +70,7 @@ public class BookingsResource {
         return ResponseEntity.ok("Succesfully booked the class");
       } catch (Exception e) {
         log.info(e.getMessage());
+        log.info(ErrorCutter.cut(e.getMessage()));
         return ResponseEntity.badRequest().body(ErrorCutter.cut(e.getMessage()));
       }
     }

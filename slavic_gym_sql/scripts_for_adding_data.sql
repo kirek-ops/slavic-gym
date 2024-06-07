@@ -252,8 +252,10 @@ DECLARE
     end_time TIME;
     class_date DATE;
     class_name TEXT;
+    random_start_interval INTEGER;
+    random_duration_interval INTEGER;
 BEGIN
-    FOR i IN 1..100 LOOP
+    FOR i IN 1..500 LOOP
             -- Randomly select a gym id between 1 and 40
             chosen_gym := FLOOR(RANDOM() * 40 + 1);
 
@@ -264,11 +266,18 @@ BEGIN
             capacity := 10 + FLOOR(RANDOM() * 21);
 
             -- Randomly select a date for the class (from 30 days in the past to 30 days in the future)
-            class_date := CURRENT_DATE + (FLOOR(RANDOM() * 61) - 40) * INTERVAL '1 day';
+            class_date := CURRENT_DATE + (FLOOR(RANDOM() * 61) - 10) * INTERVAL '1 day';
 
             -- Randomly select a time for the class (between 6:00 AM and 8:00 PM)
-            start_time := TIME '06:00:00' + (FLOOR(RANDOM() * 8400) * INTERVAL '1 second');
-            end_time := start_time + (FLOOR(RANDOM() * 5400 + 3600) * INTERVAL '1 second'); -- Duration between 1 and 2.5 hours
+            random_start_interval := FLOOR(RANDOM() * 50) * 15; -- 8 intervals of 15 minutes within the first 2 hours
+            start_time := TIME '06:00:00' + (random_start_interval * INTERVAL '1 minute');
+
+            -- Generate a random duration between 1 hour (60 minutes) and 2.5 hours (150 minutes) rounded to the nearest 15 minutes
+            random_duration_interval := FLOOR(RANDOM() * 7 + 4) * 15; -- 7 intervals of 15 minutes within the 1 to 2.5 hours range
+            end_time := start_time + (random_duration_interval * INTERVAL '1 minute');
+
+--             start_time := TIME '06:00:00' + (FLOOR(RANDOM() * 8400) * INTERVAL '1 second');
+--             end_time := start_time + (FLOOR(RANDOM() * 5400 + 3600) * INTERVAL '1 second'); -- Duration between 1 and 2.5 hours
 
             BEGIN
                 -- Randomly select an instructor who is either a Trainer or Manager at the specific gym
@@ -414,7 +423,7 @@ DECLARE
     id_member INT;
     id_class_booked INT;
     booking_count INT := 0;
-    max_bookings INT := 1000; -- Max number of bookings to attempt
+    max_bookings INT := 100; -- Max number of bookings to attempt
 BEGIN
     FOR id_member IN 1..max_bookings LOOP
             FOR booking_count IN 1..(FLOOR(RANDOM() * 3) + 1) LOOP -- Each member can have 0 to 2 bookings

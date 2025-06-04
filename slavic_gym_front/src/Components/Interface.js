@@ -16,25 +16,6 @@ const Interface = () => {
     const [positions, setPositions] = useState(null);
     const [hasPosition, setHasPosition] = useState({});
 
-    const fetchGymLocations = async () => {
-        try {
-            const updatedGyms = await Promise.all(gyms.map(async gym => {
-                const gym_location = await axios.get(`http://localhost:8080/gyms/${gym.id_gym}/get-location`);
-                const { lat: gym_lat, lng: gym_lng } = gym_location.data;
-                const distance = calculateDistance(userLocation.latitude, userLocation.longitude, gym_lat, gym_lng);
-                return {
-                    ...gym,
-                    distance: distance
-                };
-            }));
-
-            const sortedGyms = updatedGyms.sort((a, b) => a.distance - b.distance);
-            setGyms(sortedGyms);
-        } catch (error) {
-            console.error('Error fetching gym locations:', error);
-        }
-    };
-
     useEffect(() => {
         // Get user geolocation
         navigator.geolocation.getCurrentPosition(
@@ -79,22 +60,39 @@ const Interface = () => {
 
     useEffect(() => {
         if (positions) {
-          const newHasPositions = Object.entries(positions).reduce((acc, [key, value]) => {
-            if (!acc[value]) {
-              acc[value] = [];
-            }
-            acc[value].push(parseInt(key));
-            return acc;
-          }, {});
-          setHasPosition(newHasPositions);
+            const newHasPositions = Object.entries(positions).reduce((acc, [key, value]) => {
+                if (!acc[value]) {
+                    acc[value] = [];
+                }
+                acc[value].push(parseInt(key));
+                return acc;
+            }, {});
+            setHasPosition(newHasPositions);
         } else {
-          setHasPosition({});
+            setHasPosition({});
         }
         console.log(hasPosition);
     }, [positions]);
 
     useEffect(() => {
-        fetchGymLocations();
+        const fetchGymLocations = async () => {
+            try {
+                const updatedGyms = await Promise.all(gyms.map(async gym => {
+                    const gym_location = await axios.get(`http://localhost:8080/gyms/${gym.id_gym}/get-location`);
+                    const { lat: gym_lat, lng: gym_lng } = gym_location.data;
+                    const distance = calculateDistance(userLocation.latitude, userLocation.longitude, gym_lat, gym_lng);
+                    return {
+                        ...gym,
+                        distance: distance
+                    };
+                }));
+
+                const sortedGyms = updatedGyms.sort((a, b) => a.distance - b.distance);
+                setGyms(sortedGyms);
+            } catch (error) {
+                console.error('Error fetching gym locations:', error);
+            }
+        };
 
         const interval = setInterval(fetchGymLocations, 10000); // Fetch every 10 seconds
 
@@ -122,7 +120,34 @@ const Interface = () => {
         setSelectedGym(event.target.value);
     };
 
-    const handleQRButtonClick = () => {
+    const isExpired = (membership) => {
+        const currentDate = new Date();
+        const startDate = new Date(membership.start_date);
+        const expirationDate = new Date(startDate.getTime() + membership.duration * 24 * 60 * 60 * 1000);
+        return currentDate > expirationDate;
+    };
+
+    const handleQRButtonClick = async () => {
+        const response = await axios.post(`http://localhost:8080/memberships/getbyid`, { id });
+
+        console.log(response);
+
+        if (Array.isArray(response.data)) {
+            const memberships = response.data;
+            const activeMemberships = memberships.filter(m => !isExpired(m));
+
+            console.log(activeMemberships.length);
+
+            if (activeMemberships.length == 0) {
+                alert('You have no active memberships');
+                return;
+            }
+        }
+        else {
+            alert('You have no active memberships');
+            return;
+        }
+
         if (selectedGym) {
             navigate('/myqr', { state: { id: id, email: email, gym: selectedGym } });
         } else {

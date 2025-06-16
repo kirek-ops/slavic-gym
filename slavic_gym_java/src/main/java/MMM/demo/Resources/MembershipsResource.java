@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import MMM.demo.Daos.MembershipDaoImpl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +59,12 @@ public class MembershipsResource {
         Integer membershipId = (Integer) body.get("membershipId");
 
         Map <String, Object> response = membershipDaoImpl.prolongMembership(memberId, membershipId);
+
+        System.out.println(response);
+
         if (response.containsKey("message")) {
             return ResponseEntity.ok(response);
         }
-        return ResponseEntity.ok(Map.of("success", true,
-                                        "rowsAffected", response.get("rowsAffected"),
-                                        "expirationDate", response.get("expirationDate")));
+        return ResponseEntity.ok(Map.of("success", true));
     }
 }

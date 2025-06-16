@@ -23,14 +23,51 @@ const MembershipShop = () => {
             // Fetch user's active memberships
             const userMembershipsResponse = await axios.post('http://localhost:8080/memberships/getbyid', { id });
             if (Array.isArray(userMembershipsResponse.data)) {
-                setUserMemberships(userMembershipsResponse.data);
-                console.log('User memberships:', userMembershipsResponse.data);
+                const userMemberships = userMembershipsResponse.data;
+                const filteredMemberships = filterUserMemberships(userMemberships);
+                setUserMemberships(filteredMemberships);
+                console.log('User memberships:', filteredMemberships);
             } else {
                 console.error('API response is not an array:', userMembershipsResponse.data);
             }
         } catch (error) {
             console.error('Error fetching memberships:', error);
         }
+    };
+
+    const filterUserMemberships = (memberships) => {
+        const currentDate = new Date();
+        const activeMemberships = memberships.filter(m => !isExpired(m));
+
+        if (activeMemberships.length > 0) {
+            return activeMemberships;
+        } else {
+            const expiredMemberships = memberships.filter(m => isExpired(m));
+            const uniqueMemberships = new Map();
+
+            expiredMemberships.forEach(membership => {
+                if (!uniqueMemberships.has(membership.id_membership)) {
+                    uniqueMemberships.set(membership.id_membership, membership);
+                } else {
+                    const existingMembership = uniqueMemberships.get(membership.id_membership);
+                    const existingStartDate = new Date(existingMembership.start_date);
+                    const currentStartDate = new Date(membership.start_date);
+                    if (currentStartDate > existingStartDate) {
+                        uniqueMemberships.set(membership.id_membership, membership);
+                    }
+                }
+            });
+
+            return Array.from(uniqueMemberships.values());
+        }
+    };
+
+
+    const isExpired = (membership) => {
+        const currentDate = new Date();
+        const startDate = new Date(membership.start_date);
+        const expirationDate = new Date(startDate.getTime() + membership.duration * 24 * 60 * 60 * 1000);
+        return currentDate > expirationDate;
     };
 
     useEffect(() => {
@@ -64,6 +101,7 @@ const MembershipShop = () => {
             if (response.data.success) {
                 alert('Membership prolonged successfully!');
                 setHasBeenTransaction(prev => prev + 1);
+                fetchData();
             } else {
                 alert('Failed to prolong membership.');
             }
@@ -71,13 +109,6 @@ const MembershipShop = () => {
             console.error('Error prolonging membership:', error);
             alert('Error prolonging membership.');
         }
-    };
-
-    const isExpired = (membership) => {
-        const currentDate = new Date();
-        const startDate = new Date(membership.start_date);
-        const expirationDate = new Date(startDate.getTime() + membership.duration * 24 * 60 * 60 * 1000);
-        return currentDate > expirationDate;
     };
 
     return (
